@@ -1,0 +1,68 @@
+
+" ---------------------------------------------------------------------------------------------
+" Settings added to default config
+" ---------------------------------------------------------------------------------------------
+
+" https://superuser.com/questions/181377/auto-reloading-a-file-in-vim-as-soon-as-it-changes-on-disk
+" Autoreolad, if code beautify feature for sass and/or src is switched on
+set autoread
+au CursorHold * checktime
+
+" In gvim this setting works fine, in vim you might need to install https://github.com/djoshea/vim-autoread
+" To prevent too much polling, best mode of operation is WatchForChangesWhileInThisBuffer
+
+" Auto-close of quotes, brackets etc.
+inoremap " ""<left>
+inoremap ' ''<left>
+inoremap ( ()<left>
+inoremap [ []<left>
+inoremap { {}<left>
+"inoremap {<CR> {<CR>}<ESC>O
+"inoremap {;<CR> {<CR>};<ESC>O
+
+" Auto-replace of ASCII-smileys with utf8 smileys
+iabbrev :) 😄               " Smile
+iabbrev :D 😄               " Grin
+iabbrev ;) 😉               " Wink
+iabbrev 8) 😎               " Cool
+iabbrev >) 😈               " Devil
+
+" Indenting
+" https://vim.fandom.com/wiki/Indenting_source_code
+set shiftwidth=3  "indenting is 3 spaces
+set tabstop=3
+set autoindent
+set smartindent
+
+" Cosmetics
+set number
+"For default colorscheme
+" highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
+
+" In case of default theme, alter some hightlighting colors by YouCompleteMe
+" highlight YcmErrorSection ctermfg=white ctermbg=DarkGray
+" highlight YcmWarningSection ctermfg=white ctermbg=Blue
+
+" Uncomment to show tabs as characters
+" set list
+" set listchars=tab:>-
+
+" Plugin section - begin. For newly added plugins, run :PlugInstall in vim
+call plug#begin('~/.vim/plugged')
+Plug 'morhetz/gruvbox'        " Gruvbox theme https://github.com/morhetz/gruvbox
+Plug 'mattn/emmet-vim'        " Zen coding by https://github.com/mattn/emmet-vim/
+call plug#end()
+" Plugin section - end
+
+" Config emmet - trigger becomes ,,
+let g:user_emmet_leader_key=','
+
+" Config gruvbox
+let g:gruvbox_contrast_dark = 'medium' "Possible values are soft, medium and hard. Default: medium
+autocmd vimenter * colorscheme gruvbox
+set background=dark    " Setting dark mode
+
+" Config for git commit.
+" If vim isn't the default editor put export EDITOR=vim in your ~/.bashrc
+au FileType gitcommit
+ \ hi gitcommitSummary ctermfg=white ctermbg=black
