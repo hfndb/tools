@@ -20,4 +20,4 @@
 #    (t abbreviation for tag)
 #
 
-tags-exuberant -R  ./src
+ctags-exuberant -R  ./src
