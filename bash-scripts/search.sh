@@ -27,7 +27,9 @@ else
 	PAR=$1
 fi
 
-grep -inr --color "$SEARCH" $PAR
+COLOR=never # never, always or auto
+
+grep -inr --color=$COLOR "$SEARCH" $PAR
 
 # Options:
 # - i case insensitive

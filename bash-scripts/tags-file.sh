@@ -10,6 +10,7 @@
 # Prerequisites:
 # - https://github.com/romainl/ctags-patterns-for-javascript - slightly modified version in this repo, ctags.cfg
 # - apt-get install ctags-exuberant
+# - cp ./ctags.cfg ~/.ctags
 #
 # Some others references found on the way:
 # - https://fossies.org/linux/global/gtags.vim

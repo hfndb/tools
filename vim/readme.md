@@ -2,9 +2,15 @@
 
 Back to [main page](../readme.md).
 
-Usually I work with [vim](https://en.wikipedia.org/wiki/Vim_(text_editor)) and [Kate](https://en.wikipedia.org/wiki/Kate_%28text_editor%29). Tools like VS Code come with quite some overhead in terms of memory consumption and processor load.
+Usually I work with [vim](https://en.wikipedia.org/wiki/Vim_(text_editor)), [neovim-qt](https://github.com/equalsraf/neovim-qt) and [Kate](https://en.wikipedia.org/wiki/Kate_%28text_editor%29). Lightweight.
 
-To **install vim** with [YouCompleteMe](https://awesomeopensource.com/project/ycm-core/YouCompleteMe?categoryPage=3) for [autocompletion](https://en.wikipedia.org/wiki/Autocomplete) [emmet-vim](https://github.com/mattn/emmet-vim/) for Zen coding and [Gruvbox theme](https://github.com/morhetz/gruvbox) for gentle [eye candy](https://en.wikipedia.org/wiki/Eye_Candy_(Visual_appeal)):
+The information below is for your inspiration. This is how I **install and configure vim** with plugins:
+
++ [YouCompleteMe](https://awesomeopensource.com/project/ycm-core/YouCompleteMe?categoryPage=3) for [autocompletion](https://en.wikipedia.org/wiki/Autocomplete)
++ [emmet-vim](https://github.com/mattn/emmet-vim/) for Zen coding in HTML and CSS
++ [Gruvbox theme](https://github.com/morhetz/gruvbox) for gentle [eye candy](https://en.wikipedia.org/wiki/Eye_Candy_(Visual_appeal))
++ [yajs.vim](https://github.com/othree/yajs.vim) for syntax highlighting in JavaScript, and to enable code folding
++ [vim-airline](https://github.com/vim-airline/vim-airline) to get a nice status bar and tab line
 
 
 ```
@@ -20,17 +26,18 @@ wget https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -O ~/.v
 # If you don't have a file ~./.vimrc yet:
 cp /etc/vim/vimrc ~/.vimrc
 
+# Add config in this directory to ~./.vimrc
+cat ./vimrc >> ~/.vimrc
+
+# Install plugins using vim-plug
+vim +PlugInstall +qall
+
 # Settings for ctags-exuberant, more info see [here](../basch-script/tags-file.sh)
 cp -af ./ctags.cfg ~/.ctags
 
-
 ```
 
-To **configure vim** you need to add the lines of [this file](./vimrc) to (the bottom of) **~./.vimrc**:
-
 ## Installation and configuration of gvim
-
-After installation of vim you could also install the GUI-version:
 
 ```
 sudo apt-get install vim-gtk3
@@ -38,10 +45,29 @@ sudo apt-get install vim-gtk3
 # If you don't have a file ~./.gvimrc yet:
 cp /etc/vim/gvimrc ~/.gvimrc
 
+# Add config in this directory to ~./.gvimrc
+cat ./vimrc >> ~/.gvimrc
+
 ```
 
-To **configure gvim** you need to add same lines as above, for vim, to (the bottom of) **~./.gvimrc**.
+To start gvim maximized, you could add the following lines to (the bottom of) **~./.gvimrc**:
 
+```
+" Start maximized
+set lines=999 columns=999
+
+```
+
+## Installation and configuration of Neovim
+
+After installation of vim you could also install Neovim and the GUI-version Neovim-qt:
+
+```
+sudo apt-get install neovim neovim-qt
+
+cp -ar ./nvim ~/.config/
+
+```
 
 ## Health warnings
 
