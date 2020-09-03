@@ -21,4 +21,4 @@
 #    (t abbreviation for tag)
 #
 
-ctags-exuberant -R  ./src
+ctags-exuberant --fields=nksSaf --file-scope=yes -R  ./src

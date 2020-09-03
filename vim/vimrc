@@ -54,9 +54,11 @@ if filereadable("/etc/vim/vimrc.local")
 endif
 
 
-" ---------------------------------------------------------------------------------------------
+" _____________________________________________________________________________________________
+"
 " Settings added to default config
-" ---------------------------------------------------------------------------------------------
+" _____________________________________________________________________________________________
+"
 
 "---------------------------------
 " Plugin section - begin
@@ -64,35 +66,82 @@ endif
 " For newly added plugins, run :PlugInstall in vim or commandline, vim +PlugInstall +qall
 
 call plug#begin('~/.vim/plugged')
-Plug 'morhetz/gruvbox'              " Gruvbox theme
-                                    "   https://github.com/morhetz/gruvbox
-Plug 'mattn/emmet-vim'              " Zen coding
-                                    "   https://github.com/mattn/emmet-vim/
-Plug 'othree/yajs.vim'              " Syntax highlighting for JavaScript, enables code folding
-                                    "   https://github.com/othree/yajs.vim
-"Plug 'pangloss/vim-javascript'     " Syntax highlighting for JavaScript, JSX and TypeScript
-                                    "   https://github.com/pangloss/vim-javascript
-Plug 'vim-airline/vim-airline'      " Status bar
-                                    "   https://github.com/vim-airline/vim-airline
+Plug 'morhetz/gruvbox'
+Plug 'mattn/emmet-vim'
+Plug 'othree/yajs.vim'
+Plug 'preservim/nerdtree'
+Plug 'majutsushi/tagbar'
+Plug 'tpope/vim-commentary'
+Plug 'vim-airline/vim-airline'
 call plug#end()
 
+if !exists('g:plugins_updated')
+  let g:plugins_updated = 1
+  autocmd VimEnter * PlugInstall | q
+endif
+
 " Config emmet - trigger becomes ,,
+"---------------------------------
 let g:user_emmet_leader_key=','
 
+
 " Config gruvbox
+"---------------------------------
 let g:gruvbox_contrast_dark = 'medium' "Possible values are soft, medium and hard. Default: medium
 autocmd vimenter * colorscheme gruvbox
 set background=dark    " Setting dark mode
 
+
+" Config for NERDtree
+"---------------------------------
+" If more than one window and previous buffer was NERDTree, go back to it.
+autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
+let g:plug_window = 'noautocmd vertical topleft new'
+" Shortcut \t to toggle
+map <Leader>t :NERDTreeToggle<CR>
+
+
+" Config for Tagbar
+"---------------------------------
+let g:tagbar_width = 25
+let g:tagbar_ctags_bin = '/usr/bin/ctags-exuberant'
+let g:tagbar_type_javascript = {
+      \ 'ctagstype': 'javascript',
+      \ 'kinds': [
+      \ 'A:arrays',
+      \ 'P:properties:1',
+      \ 'T:tags',
+      \ 'O:objects',
+      \ 'G:generator functions',
+      \ 'F:functions',
+      \ 'C:constructors/classes',
+      \ 'M:methods',
+      \ 'V:variables:1',
+      \ 'I:imports',
+      \ 'E:exports',
+      \ 'S:styled components'
+      \ ]}
+nmap <Leader>o :TagbarToggle<CR>
+
+
 " Config for vim-javascript
+"---------------------------------
 let g:javascript_plugin_jsdoc = 1
+
+
+" Config Airline for buffers
+"---------------------------------
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#formatter = 'default'
+
 
 "---------------------------------
 " Plugin section - end
 "---------------------------------
 
 " https://superuser.com/questions/181377/auto-reloading-a-file-in-vim-as-soon-as-it-changes-on-disk
-" Autoreolad, if code beautify feature for sass and/or src is switched on
+" Autoreolad, for if code beautify feature for sass and/or src is switched on
 set autoread
 au CursorHold * checktime
 
@@ -109,11 +158,16 @@ inoremap { {}<left>
 "inoremap {;<CR> {<CR>};<ESC>O
 
 " Auto-replace of ASCII-smileys with utf8 smileys
-iabbrev :) 😄               " Smile
-iabbrev :D 😄               " Grin
-iabbrev ;) 😉               " Wink
-iabbrev 8) 😎               " Cool
-iabbrev >) 😈               " Devil
+" Smile
+iabbrev :) 😄
+" Grin
+iabbrev :D 😄
+" Wink
+iabbrev ;) 😉
+" Cool
+iabbrev 8) 😎
+" Devil
+iabbrev >) 😈
 
 " Indenting
 " https://vim.fandom.com/wiki/Indenting_source_code
@@ -126,7 +180,7 @@ set smartindent
 au BufReadPre * setlocal foldmethod=syntax
 set foldlevelstart=99       " start file with all folds opened
 
-" Cosmetics
+" Line numbering
 set number
 "For default colorscheme
 " highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
@@ -148,13 +202,45 @@ au FileType gitcommit
 set hidden
 nnoremap <C-N> :bnext<CR>                  " Ctrl-n - Next buffer
 nnoremap <C-P> :bprev<CR>                  " Ctrl-p - Previous buffer
-nnoremap <C-W> ::bd<CR>                    " Ctrl-w - Close buffer
+nnoremap <Leader>c ::bd<CR>                " \c - Close buffer
                                            " \b - Show buffer list to enter buffer nummber, or part of file name, to go to
 nnoremap <Leader>b :ls<CR>:b<Space>
                                            " Same as above but with 'more'
 "nnoremap <C-e> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
 
-" Airline settings for buffers
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline#extensions#tabline#formatter = 'default'
+" System clipboard integration; Ctrl-x for cut, Ctrl-c for copy (yank), Ctrl-v for paste
+if has("clipboard")
+    vnoremap <C-X> "+x
+    vnoremap <C-C> "+y
+    map <C-V> "+gP
+    cmap <C-V> <C-R>+
+endif
+
+" CTRL-S to save (write) file, also in Insert mode
+noremap <C-S>		:update<CR>
+vnoremap <C-S>		<C-C>:update<CR>
+inoremap <C-S>		<Esc>:update<CR>gi
+
+" For gvim; make more space
+if has("gui_running")
+	set lines=999 columns=999              " Start maximized
+	set guioptions-=m                      " Remove menu bar
+	set guioptions-=T                      " Remove toolbar
+	set guioptions-=r                      " Remove right-hand scroll bar
+	autocmd vimenter * NERDTree
+	autocmd VimEnter * :TagbarOpen
+endif
+
+
+" ----------------------------------------------------------------
+" Defined key mappings:
+" - \o - Toggle outline of file (tagbar)
+" - \t - Toggle NERDtree
+" - \b - List buffers
+" - \c - Close buffer
+" - Ctrl-p - Go to previous buffer
+" - Ctrl-n - Go to next buffer
+" - Ctrl-c,v,x - Copy/paste in generic style
+" - Ctrl-s - Write buffer
+" - ,, - Trigger Emmet
+" ----------------------------------------------------------------

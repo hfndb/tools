@@ -2,7 +2,7 @@
 
 Back to [main page](../readme.md).
 
-Usually I work with [vim](https://en.wikipedia.org/wiki/Vim_(text_editor)), [neovim-qt](https://github.com/equalsraf/neovim-qt) and [Kate](https://en.wikipedia.org/wiki/Kate_%28text_editor%29). Lightweight.
+Usually I work with [vim](https://en.wikipedia.org/wiki/Vim_(text_editor)), [gvim](https://en.wikipedia.org/wiki/Vim_(text_editor)#Interface) and [Kate](https://en.wikipedia.org/wiki/Kate_%28text_editor%29). Lightweight.
 
 The information below is for your inspiration. This is how I **install and configure vim** with plugins:
 
@@ -10,6 +10,9 @@ The information below is for your inspiration. This is how I **install and confi
 + [emmet-vim](https://github.com/mattn/emmet-vim/) for Zen coding in HTML and CSS
 + [Gruvbox theme](https://github.com/morhetz/gruvbox) for gentle [eye candy](https://en.wikipedia.org/wiki/Eye_Candy_(Visual_appeal))
 + [yajs.vim](https://github.com/othree/yajs.vim) for syntax highlighting in JavaScript, and to enable code folding
++ [nerdtree](https://github.com/preservim/nerdtree) file explorer
++ [tagbar](http://majutsushi.github.io/tagbar/) for jumping to functions, classes methods. Only configured for JavaScript
++ [vim-commentary](https://github.com/tpope/vim-commentary) to (un)comment
 + [vim-airline](https://github.com/vim-airline/vim-airline) to get a nice status bar and tab line
 
 

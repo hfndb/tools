@@ -9,7 +9,7 @@
 #
 # In ~/.bashrc you could add the alias:
 # alias sf="/abosolute/path/to/search-file.sh"
-#    (s abbreviation for search file, not sciencd fiction)
+#    (sf abbreviation for search file, not sciencd fiction)
 
 echo "Input string to search for:"
 read SEARCH

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script to recursively search for a string using grep and open found files in gvim tabs
+# Script to recursively search for a string using grep and open found files in gvim
 #
 # Usage: /absolute/path/to/search-open.sh [<directory>]
 # Paramater defaults to ./src. If using wildcards, surround it with quotes
@@ -30,14 +30,4 @@ fi
 TARGETS=$(grep -iHrl "$SEARCH" $PAR)
 
 # Copy of gvim-tabs.sh
-ANS=`pgrep -fx "gvim --servername GVIM"`
-
-# echo $@
-
-if [[ ! $ANS ]]; then
-    gvim --servername GVIM
-fi
-
-if [[ $TARGETS ]]; then
-	gvim --servername GVIM --remote-tab $TARGETS
-fi
+gvim --remote-silent $TARGETS
