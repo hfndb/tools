@@ -6,21 +6,24 @@ Usually I work with [vim](https://en.wikipedia.org/wiki/Vim_(text_editor)), [gvi
 
 The information below is for your inspiration. This is how I **install and configure vim** with plugins:
 
-+ [YouCompleteMe](https://awesomeopensource.com/project/ycm-core/YouCompleteMe?categoryPage=3) for [autocompletion](https://en.wikipedia.org/wiki/Autocomplete)
-+ [emmet-vim](https://github.com/mattn/emmet-vim/) for Zen coding in HTML and CSS
 + [Gruvbox theme](https://github.com/morhetz/gruvbox) for gentle [eye candy](https://en.wikipedia.org/wiki/Eye_Candy_(Visual_appeal))
-+ [yajs.vim](https://github.com/othree/yajs.vim) for syntax highlighting in JavaScript, and to enable code folding
-+ [nerdtree](https://github.com/preservim/nerdtree) file explorer
-+ [tagbar](http://majutsushi.github.io/tagbar/) for jumping to functions, classes methods. Only configured for JavaScript
-+ [vim-commentary](https://github.com/tpope/vim-commentary) to (un)comment
++ [fzf.vim](https://github.com/junegunn/fzf.vim) for fuzzy file search and jumping to tags
++ [vim-polyglot](https://github.com/othree/yajs.vim) for syntax highlighting, and to enable code folding
++ [marvim](https://github.com/vim-scripts/marvim) for persistant storage of macro's and templates
++ [emmet-vim](https://github.com/mattn/emmet-vim/) for Zen coding in HTML and CSS
++ [YouCompleteMe](https://github.com/ycm-core/YouCompleteMe) for [autocompletion](https://en.wikipedia.org/wiki/Autocomplete)
 + [vim-airline](https://github.com/vim-airline/vim-airline) to get a nice status bar and tab line
 
 
 ```
 # Installation of vim:
-sudo apt-get install vim vim-addon-manager vim-youcompleteme ctags-exuberant
+sudo apt-get install vim vim-addon-manager vim-youcompleteme ctags-exuberant universal-ctags ripgrep
 
-# Install code completion in your home directory
+# Installation of fzf; fuzzy completion and fuzzy search with interactive finder
+git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+~/.fzf/install
+
+# Install code completion in ~/.vim
 vam install youcompleteme
 
 # Install plugin manager https://github.com/junegunn/vim-plug (activated in .vimrc)
@@ -35,8 +38,13 @@ cat ./vimrc >> ~/.vimrc
 # Install plugins using vim-plug
 vim +PlugInstall +qall
 
-# Settings for ctags-exuberant, more info see [here](../basch-script/tags-file.sh)
+# Setings for generating tags, using ctags-exuberant or ctags-universal. More info see [here](../basch-script/tags-file.sh)
+
+# ctags-exuberant
 cp -af ./ctags.cfg ~/.ctags
+
+# ctags-universal
+cp -afr ./ctags.d ~/.ctags.d
 
 ```
 
@@ -50,14 +58,6 @@ cp /etc/vim/gvimrc ~/.gvimrc
 
 # Add config in this directory to ~./.gvimrc
 cat ./vimrc >> ~/.gvimrc
-
-```
-
-To start gvim maximized, you could add the following lines to (the bottom of) **~./.gvimrc**:
-
-```
-" Start maximized
-set lines=999 columns=999
 
 ```
 

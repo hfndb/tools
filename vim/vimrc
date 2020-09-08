@@ -68,17 +68,15 @@ endif
 call plug#begin('~/.vim/plugged')
 Plug 'morhetz/gruvbox'
 Plug 'mattn/emmet-vim'
-Plug 'othree/yajs.vim'
-Plug 'preservim/nerdtree'
-Plug 'majutsushi/tagbar'
-Plug 'tpope/vim-commentary'
+Plug 'sheerun/vim-polyglot'
+Plug 'mattn/jscomplete-vim'
+"Plug 'preservim/nerdtree'
+Plug 'vim-scripts/marvim'
+Plug '~/.fzf'
+Plug 'junegunn/fzf.vim'
 Plug 'vim-airline/vim-airline'
 call plug#end()
 
-if !exists('g:plugins_updated')
-  let g:plugins_updated = 1
-  autocmd VimEnter * PlugInstall | q
-endif
 
 " Config emmet - trigger becomes ,,
 "---------------------------------
@@ -95,38 +93,29 @@ set background=dark    " Setting dark mode
 " Config for NERDtree
 "---------------------------------
 " If more than one window and previous buffer was NERDTree, go back to it.
-autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
-let g:plug_window = 'noautocmd vertical topleft new'
-" Shortcut \t to toggle
-map <Leader>t :NERDTreeToggle<CR>
+"autocmd BufEnter * if bufname('#') =~# "^NERD_tree_" && winnr('$') > 1 | b# | endif
+"let g:plug_window = 'noautocmd vertical topleft new'
+"map <Leader>f :NERDTreeToggle<CR>
 
 
-" Config for Tagbar
+" Config for fzf
 "---------------------------------
-let g:tagbar_width = 25
-let g:tagbar_ctags_bin = '/usr/bin/ctags-exuberant'
-let g:tagbar_type_javascript = {
-      \ 'ctagstype': 'javascript',
-      \ 'kinds': [
-      \ 'A:arrays',
-      \ 'P:properties:1',
-      \ 'T:tags',
-      \ 'O:objects',
-      \ 'G:generator functions',
-      \ 'F:functions',
-      \ 'C:constructors/classes',
-      \ 'M:methods',
-      \ 'V:variables:1',
-      \ 'I:imports',
-      \ 'E:exports',
-      \ 'S:styled components'
-      \ ]}
-nmap <Leader>o :TagbarToggle<CR>
+nnoremap <Leader>o :Files ./src
+nnoremap <Leader>h :History<CR>
+nnoremap <Leader>t :Tags<CR>
+nnoremap <Leader>j :BTags<CR>
+nnoremap <Leader>s :Rg
 
 
 " Config for vim-javascript
 "---------------------------------
 let g:javascript_plugin_jsdoc = 1
+
+
+" Config for jscomplete-vim
+"---------------------------------
+autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType typescript set omnifunc=javascriptcomplete#CompleteJS
 
 
 " Config Airline for buffers
@@ -144,6 +133,9 @@ let g:airline#extensions#tabline#formatter = 'default'
 " Autoreolad, for if code beautify feature for sass and/or src is switched on
 set autoread
 au CursorHold * checktime
+
+" Disable scratch preview window
+set completeopt-=preview
 
 " In gvim this setting works fine, in vim you might need to install https://github.com/djoshea/vim-autoread
 " To prevent too much polling, best mode of operation is WatchForChangesWhileInThisBuffer
@@ -200,17 +192,16 @@ au FileType gitcommit
 
 " Buffers
 set hidden
-nnoremap <C-N> :bnext<CR>                  " Ctrl-n - Next buffer
-nnoremap <C-P> :bprev<CR>                  " Ctrl-p - Previous buffer
+nnoremap <C-Down> :bnext<CR>               " Ctrl-down - Next buffer
+nnoremap <C-Up> :bprev<CR>                 " Ctrl-up - Previous buffer
 nnoremap <Leader>c ::bd<CR>                " \c - Close buffer
                                            " \b - Show buffer list to enter buffer nummber, or part of file name, to go to
 nnoremap <Leader>b :ls<CR>:b<Space>
                                            " Same as above but with 'more'
 "nnoremap <C-e> :set nomore <Bar> :ls <Bar> :set more <CR>:b<Space>
 
-" System clipboard integration; Ctrl-x for cut, Ctrl-c for copy (yank), Ctrl-v for paste
+" System clipboard integration; Ctrl-c for copy (yank), Ctrl-v for paste
 if has("clipboard")
-    vnoremap <C-X> "+x
     vnoremap <C-C> "+y
     map <C-V> "+gP
     cmap <C-V> <C-R>+
@@ -219,28 +210,31 @@ endif
 " CTRL-S to save (write) file, also in Insert mode
 noremap <C-S>		:update<CR>
 vnoremap <C-S>		<C-C>:update<CR>
-inoremap <C-S>		<Esc>:update<CR>gi
+inoremap <C-S>		<Esc>:update<CR>
 
-" For gvim; make more space
-if has("gui_running")
+" For gvim and nvim-qt; make more space
+if has("gui_running") || has('nvim')
+	set guifont=Monospace\ 12
 	set lines=999 columns=999              " Start maximized
 	set guioptions-=m                      " Remove menu bar
 	set guioptions-=T                      " Remove toolbar
 	set guioptions-=r                      " Remove right-hand scroll bar
-	autocmd vimenter * NERDTree
-	autocmd VimEnter * :TagbarOpen
 endif
 
 
 " ----------------------------------------------------------------
 " Defined key mappings:
-" - \o - Toggle outline of file (tagbar)
-" - \t - Toggle NERDtree
-" - \b - List buffers
+" - \b - Go to buffer in list
 " - \c - Close buffer
-" - Ctrl-p - Go to previous buffer
-" - Ctrl-n - Go to next buffer
-" - Ctrl-c,v,x - Copy/paste in generic style
+" - \f - Open files using NERDtree (commented out)
+" - \j - Jump to tag in current buffer using fzf
+" - \t - Jump to tag in project using fzf
+" - \o - Open file using fzf
+" - \s - Search project for string using fzf - `Alt-a` to select all, `Alt-D` to deselect all
+" - \h - Open file from history using fzf
+" - Ctrl-up - Go to previous buffer
+" - Ctrl-down - Go to next buffer
+" - Ctrl-c,v - Copy/paste
 " - Ctrl-s - Write buffer
 " - ,, - Trigger Emmet
 " ----------------------------------------------------------------

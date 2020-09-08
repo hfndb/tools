@@ -9,16 +9,28 @@
 #
 # Prerequisites:
 # - https://github.com/romainl/ctags-patterns-for-javascript - slightly modified version in this repo, ctags.cfg
-# - apt-get install ctags-exuberant
-# - cp ./ctags.cfg ~/.ctags
+# - apt-get install ctags-exuberant universal-ctags
+# - ctags-exuberant
+#     cp -af ./ctags.cfg ~/.ctags
+# - ctags-universal
+#     cp -afr ./ctags.d ~/.ctags.d
 #
 # Some others references found on the way:
 # - https://fossies.org/linux/global/gtags.vim
-# - https://medium.com/adorableio/modern-javascript-ctags-configuration-199884dbcc1
 #
 # In ~/.bashrc you could add the alias:
 # alias t="/abosolute/path/to/tags-file.sh"
 #    (t abbreviation for tag)
 #
 
-ctags-exuberant --fields=nksSaf --file-scope=yes -R  ./src
+GENERATOR="universal"
+
+if [ "$GENERATOR" = "universal" ]
+then
+	ctags-universal --fields=nksSaf --file-scope=yes  --sort=no --tag-relative=yes --totals=yes -R ./src &> /dev/null
+elif [ "$GENERATOR" = "exuberant" ]
+then
+	ctags-exuberant --sort=no --fields=nksSaf --file-scope=yes -R  ./src
+	# For a single file this would be:
+	# ctags-exuberant --sort=no --fields=nksSaf -f <output file name> --file-scope=yes <input file name>
+fi
