@@ -105,6 +105,9 @@ nnoremap <Leader>h :History<CR>
 nnoremap <Leader>t :Tags<CR>
 nnoremap <Leader>j :BTags<CR>
 nnoremap <Leader>s :Rg
+" ~/.vim/plugged/fzf.vim/
+" Default env variable:
+" FZF_DEFAULT_COMMAND="rg --files --follow --hidden"
 
 
 " Config for vim-javascript
@@ -121,9 +124,9 @@ autocmd FileType typescript set omnifunc=javascriptcomplete#CompleteJS
 " Config Airline for buffers
 "---------------------------------
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
+let g:airline#extensions#tabline#buffer_nr_show = 0
 let g:airline#extensions#tabline#formatter = 'default'
-
+" let g:airline_theme = 'gruvbox'
 
 "---------------------------------
 " Plugin section - end
@@ -148,6 +151,7 @@ inoremap [ []<left>
 inoremap { {}<left>
 "inoremap {<CR> {<CR>}<ESC>O
 "inoremap {;<CR> {<CR>};<ESC>O
+autocmd FileType javascript inoremap ` `${}`<left><left><left><left>
 
 " Auto-replace of ASCII-smileys with utf8 smileys
 " Smile
@@ -192,9 +196,10 @@ au FileType gitcommit
 
 " Buffers
 set hidden
+nnoremap <F5> :e<CR>                       " Reload
 nnoremap <C-Down> :bnext<CR>               " Ctrl-down - Next buffer
 nnoremap <C-Up> :bprev<CR>                 " Ctrl-up - Previous buffer
-nnoremap <Leader>c ::bd<CR>                " \c - Close buffer
+nnoremap <Leader>c :bd!<CR>                " \c - Close buffer
                                            " \b - Show buffer list to enter buffer nummber, or part of file name, to go to
 nnoremap <Leader>b :ls<CR>:b<Space>
                                            " Same as above but with 'more'
@@ -214,7 +219,7 @@ inoremap <C-S>		<Esc>:update<CR>
 
 " For gvim and nvim-qt; make more space
 if has("gui_running") || has('nvim')
-	set guifont=Monospace\ 12
+	set guifont=Hack\ 12
 	set lines=999 columns=999              " Start maximized
 	set guioptions-=m                      " Remove menu bar
 	set guioptions-=T                      " Remove toolbar
@@ -236,5 +241,6 @@ endif
 " - Ctrl-down - Go to next buffer
 " - Ctrl-c,v - Copy/paste
 " - Ctrl-s - Write buffer
+" - F5 - Reload file
 " - ,, - Trigger Emmet
 " ----------------------------------------------------------------

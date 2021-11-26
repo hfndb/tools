@@ -23,3 +23,6 @@ vnoremap <silent><RightMouse> :call GuiShowContextMenu()<CR>
 
 " Set buffer name as window title
 set title
+
+" Set font and size
+GuiFont Hack:h11

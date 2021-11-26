@@ -3,7 +3,7 @@
 # Script replace strings in a file recursively
 #
 # Usage: /absolute/path/to/replace.sh [<directory>]
-# Paramater defaults to ./src. If using wildcards, surround it with quotes
+# DIRamater defaults to ./src. If using wildcards, surround it with quotes
 #
 # Will prompt for search and replace string
 #
@@ -22,12 +22,12 @@ fi
 
 if [ "$1" = "" ]
 then
-	PAR="./src/*"
+	DIR="./src"
 else
-	PAR=$1 # Wildcards will be expanded by shell, assume usage of wildcards
+	DIR=$1 # Wildcards will be expanded by shell, assume usage of wildcards
 fi
 
-grep -inr --color "$SEARCH" $PAR
+grep -inr --color "$SEARCH" $DIR/*
 
 echo "Replace $SEARCH with:"
 read REPLACE
@@ -37,4 +37,4 @@ then
 	exit 1
 fi
 
-sed -i "s/$SEARCH/$REPLACE/g" $PAR
+grep -ilr "$SEARCH" $DIR/* | xargs sed -i "s/$SEARCH/$REPLACE/g"
