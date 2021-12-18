@@ -1,0 +1,7 @@
+{
+	"description": "Sample file for project directory, then delete this line",
+	"daily": {
+		"hour": 10,
+		"minute": 0
+	}
+}

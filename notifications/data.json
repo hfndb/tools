@@ -1,0 +1,19 @@
+[
+	{
+		"description": "Sample file for project directory, then delete this comment",
+		"type": "Sample file for project directory, then delete this entry"
+	}
+	{
+		"type": "birthday",
+		"descr": "Test birthday",
+		"date": "1967-12-31",
+		"id": 0
+	},
+	{
+		"type": "daily-once",
+		"descr": "Daily once",
+		"hour": 10,
+		"minute": 0,
+		"id": 1
+	}
+]
