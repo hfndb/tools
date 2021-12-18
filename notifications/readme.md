@@ -1,8 +1,8 @@
 # Notifications
 
-Tiny application to show system notifications:
+Tiny application to show system notifications as a modal dialog or popups from the system tray:
 - Birthdays, once a year
-- Once a day notifications like alarm signals
+- Once a day notifications like alarm signals or reminders
 
 
 ## Installation
