@@ -59,53 +59,65 @@ class Generic {
 
 class Task {
 	constructor(id) {
+		this.lastModified = null;
+		this.lastRunToday = false;
 		this.path = join(process.env.NOTIFICATIONS_DIR, "." + id);
-	}
+		this.firstRun = !existsSync(this.path);
 
-	needsAction(refDate) {
-		if (!existsSync(this.path)) {
-			return true;
+		if (!this.firstRun) {
+			let info = statSync(this.path);
+			this.lastModified = info.mtime;
+			this.lastRunToday = this.isSameDayMonth(info.mtime);
 		}
-		return refDate > nw;
 	}
 
-	async finish() {
+	/**
+	 * See whether time task should run is already before current time
+	 */
+	afterEndOfTime(hours, minutes) {
+		let taskMinutes = (hours * 60) + minutes;
+		let nowMinutes = (nw.getHours() * 60) + nw.getMinutes() + 1;
+		return nowMinutes > taskMinutes;
+	}
+
+	/**
+	 * Same calendar day regardless of year
+	 */
+	isSameDayMonth(ref) {
+		return nw.getMonth() == ref.getMonth() && nw.getDate() == ref.getDate();
+	}
+
+	finish() {
 		writeFileSync(this.path, '');
 	}
 }
 
 class Birthday {
 	static async process(t) {
-		// Get reference dates
-		let inp;
+		let inp; // Reference date
 		try {
 			inp = new Date(t.date);
 		} catch (err) {
 			Generic.exitWithError(`Error parsing birth date ${t.date}, ID ${t.id}`, err);
 		}
 
-		// See if it's not too early
-		let rl = new Date(nw.year, nw.month, nw.day, cfg.daily.hour, cfg.daily.minute);
-		if (rl < nw) return;
-
 		// Process task
-		inp.setFullYear(nw.getFullYear());
 		let tsk = new Task(t.id);
-		if (tsk.needsAction(t.id, inp)) {
+		if (tsk.lastRunToday || !tsk.isSameDayMonth(inp)) return;
+		if (tsk.firstRun || tsk.afterEndOfTime(cfg.daily.hour, cfg.daily.minute)) {
 			await Generic.triggerNotification(t.descr);
-			await tsk.finish();
+			tsk.finish();
 		}
 	}
 }
 
 class DailyOnce {
 	static async process(t) {
-		let inp = new Date(nw.year, nw.month, nw.day, t.hour, t.minute);
-		if (inp < nw) return;  // See if it's not too early
 		let tsk = new Task(t.id);
-		if (tsk.needsAction(t.id, inp)) {
+		if (tsk.lastRunToday) return;
+		if (tsk.firstRun || tsk.afterEndOfTime(t.hour, t.minute)) {
 			await Generic.triggerNotification(t.descr);
-			await tsk.finish();
+			tsk.finish();
 		}
 	}
 }
