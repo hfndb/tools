@@ -37,4 +37,4 @@ then
 	exit 1
 fi
 
-grep -ilr "$SEARCH" $DIR/* | xargs sed -i "s/$SEARCH/$REPLACE/g"
+grep -ilr "$SEARCH" $DIR/* | xargs sed -i "s/$SEARCH/\"$REPLACE\"/g"

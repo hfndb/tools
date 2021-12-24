@@ -3,13 +3,13 @@
 # --------------------------------------------
 # Gather variables
 # --------------------------------------------
-DIR=`dirname $0`
-DIR=`realpath $DIR`
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd $SCRIPT_DIR
 CONFIG=$1
 if [ "$CONFIG" == "" ]; then
 	CONFIG="./"
 fi
-. $CONFIG/env.sh
+source $CONFIG/env.sh
 DEBUG_LOG_FILE=$NOTIFICATIONS_TMP-debug.txt
 
 # --------------------------------------------
@@ -61,10 +61,9 @@ fi
 # --------------------------------------------
 # Run Node.js application to generate notification(s)
 # --------------------------------------------
-cd $DIR
 $NODE_BIN/node \
 	--preserve-symlinks \
-	$DIR/index.mjs
+	./index.mjs
 
 # --------------------------------------------
 # Show notification(s)

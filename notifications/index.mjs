@@ -24,7 +24,6 @@ let tmpFile = 	process.env.NOTIFICATIONS_TMP;
 
 class Generic {
 	static async execCmd(cmd, verbose = false) {
-		console.log('executing', cmd);
 		$.verbose = verbose;
 		const output = (await $`${cmd}`).stdout.trim();
 		console.log(output);
@@ -77,7 +76,7 @@ class Task {
 	afterEndOfTime(hours, minutes) {
 		let taskMinutes = (hours * 60) + minutes;
 		let nowMinutes = (nw.getHours() * 60) + nw.getMinutes() + 1;
-		return nowMinutes > taskMinutes;
+		return nowMinutes >= taskMinutes;
 	}
 
 	/**
