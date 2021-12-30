@@ -61,9 +61,7 @@ fi
 # --------------------------------------------
 # Run Node.js application to generate notification(s)
 # --------------------------------------------
-$NODE_BIN/node \
-	--preserve-symlinks \
-	./index.mjs
+node --preserve-symlinks ./index.mjs
 
 # --------------------------------------------
 # Show notification(s)

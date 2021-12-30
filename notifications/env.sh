@@ -15,8 +15,6 @@ export XDG_SESSION_DESKTOP=KDE
 export XDG_SESSION_TYPE=x11
 export XDG_CURRENT_DESKTOP=KDE
 export XDG_RUNTIME_DIR=/run/user/1000
-# Some other variables
-NODE_BIN=/data/projects/cookware-headless-ice/node_modules/node/bin
 
 # ------------------
 # For index.mjs

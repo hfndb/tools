@@ -1,0 +1,52 @@
+{
+	"contains": [
+		"apt-get",
+		"bandwith",
+		"grep",
+		"killall"
+	],
+	"beginsWith": [
+		"#",
+		"aptitude",
+		"bzcat",
+		"ca",
+		"cat",
+		"cd",
+		"chmod",
+		"chown",
+		"cp",
+		"cv",
+		"dig",
+		"diff",
+		"echo",
+		"git",
+		"gvim",
+		"host",
+		"ifconfig",
+		"ln",
+		"ls",
+		"npm",
+		"mkdir",
+		"mv",
+		"nano",
+		"ping",
+		"rm",
+		"rmdir",
+		"rsync",
+		"service",
+		"shutdown",
+		"ssh",
+		"tar",
+		"tree",
+		"touch",
+		"unzip",
+		"vim",
+		"which",
+		"whois",
+		"zip"
+	],
+	"append": [
+		"ping google.com",
+		"shutdown -P"
+	]
+}

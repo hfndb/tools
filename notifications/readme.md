@@ -9,8 +9,7 @@ Tiny application to show system notifications as a modal dialog or popups from t
 
 ```bash
 # Install notifications
-$ cd /opt
-$ git clone https://github.com/hfndb/tools
+$ cd /opt/tools
 $ tools/notifications/install.sh
 
 # Create project

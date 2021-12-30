@@ -2,9 +2,7 @@
 
 Back to [main page](../readme.md).
 
-Usually I work with [vim](https://en.wikipedia.org/wiki/Vim_(text_editor)), [gvim](https://en.wikipedia.org/wiki/Vim_(text_editor)#Interface) and [Kate](https://en.wikipedia.org/wiki/Kate_%28text_editor%29). Lightweight.
-
-The information below is for your inspiration. This is how I **install and configure vim** with plugins:
+If you want to use [vim](https://en.wikipedia.org/wiki/Vim_(text_editor)), [gvim](https://en.wikipedia.org/wiki/Vim_(text_editor)#Interface) or Neovim, here methods I use for your inspiration, to **install and configure vim** with plugins:
 
 + [Gruvbox theme](https://github.com/morhetz/gruvbox) for gentle [eye candy](https://en.wikipedia.org/wiki/Eye_Candy_(Visual_appeal))
 + [fzf.vim](https://github.com/junegunn/fzf.vim) for fuzzy file search and jumping to tags
@@ -15,7 +13,7 @@ The information below is for your inspiration. This is how I **install and confi
 + [vim-airline](https://github.com/vim-airline/vim-airline) to get a nice status bar and tab line
 
 
-```
+```bash
 # Installation of vim:
 sudo apt-get install vim vim-addon-manager vim-youcompleteme ctags-exuberant universal-ctags ripgrep
 
@@ -46,11 +44,7 @@ cp -af ./ctags.cfg ~/.ctags
 # ctags-universal
 cp -afr ./ctags.d ~/.ctags.d
 
-```
-
-## Installation and configuration of gvim
-
-```
+# Installation of Gvim:
 sudo apt-get install vim-gtk3
 
 # If you don't have a file ~./.gvimrc yet:
@@ -59,15 +53,8 @@ cp /etc/vim/gvimrc ~/.gvimrc
 # Add config in this directory to ~./.gvimrc
 cat ./vimrc >> ~/.gvimrc
 
-```
-
-## Installation and configuration of Neovim
-
-After installation of vim you could also install Neovim and the GUI-version Neovim-qt:
-
-```
+# Installation of Neovim:
 sudo apt-get install neovim neovim-qt
-
 cp -ar ./nvim ~/.config/
 
 ```
