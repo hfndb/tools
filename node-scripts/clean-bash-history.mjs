@@ -1,4 +1,7 @@
 #! /usr/bin/env node
+import { existsSync } from "fs";
+import { homedir } from "os";
+import { join } from "path";
 
 /**
  * Script to clean .bash_history in home directory
@@ -6,32 +9,38 @@
  * Usage: clean-bash-history.mjs /path-to/config-file.json
  */
 
-import { existsSync } from "fs";
-import { homedir } from "os";
-import { join } from "path";
-// TODO Problems here while importing global package zx
-import { argv, chalk, fs } from "/usr/lib/node_modules/zx/dist/index.cjs";
-// console.log(process.env.NODE_PATH);
+// Bug in Node.js: Cannot find global package
+// import { argv, chalk, fs } from "zx";
 
+// Workaround using dynamic import. Directory import is not supported resolving ES modules
+if (!process.env.NODE_PATH) {
+	console.error("Environment variable NODE_PATH not exported yet in ~/.bashrc");
+	process.exit(1);
+}
+let zx = await import(join(process.env.NODE_PATH, "zx/dist/index.cjs"));
 
 function checkFileExists(file) {
 	if (!existsSync(file)) {
-		console.error(chalk.red(`File ${file} doesn't exist`));
+		console.error(zx.chalk.red(`File ${file} doesn't exist`));
 		process.exit(1);
 	}
 }
 
-
+// --------------------------------------------------------------------
+// Declare, initialize variables
+// --------------------------------------------------------------------
 let paths = {
-	config: argv._[0],
+	config: zx.argv._[0],
 	hist: join(homedir(), ".bash_history")
 }
+
+// Check and succeed or fail and exit
 checkFileExists(paths.config);
 checkFileExists(paths.hist);
 
 // Read config and data
-let cfg = await fs.readJSON(paths.config);
-let data = await fs.readFile(paths.hist, 'utf8');
+let cfg = await zx.fs.readJSON(paths.config);
+let data = await zx.fs.readFile(paths.hist, 'utf8');
 data = data.split("\n");
 
 // Loop existing data
@@ -61,6 +70,6 @@ data = result.sort().join("\n") +
 	"\n";
 
 // And... write
-await fs.outputFile(paths.hist, data);
+await zx.fs.outputFile(paths.hist, data);
 
 console.log(`${paths.hist} written`);

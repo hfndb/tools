@@ -10,8 +10,16 @@
 
 import { existsSync, statSync, writeFileSync } from "fs";
 import { join } from "path";
-import { $, argv, cd, chalk, fs, question } from "zx";
 
+// Bug in Node.js: Cannot find global package
+// import { $, chalk, fs } from "zx";
+
+// Workaround using dynamic import. Directory import is not supported resolving ES modules
+let zx = await import(join(process.env.NODE_PATH, "zx/dist/index.cjs"));
+
+// --------------------------------------------------------------------
+// Declare, initialize variables
+// --------------------------------------------------------------------
 let cfg;
 let tasks;
 let nw = new Date();
@@ -25,7 +33,7 @@ let tmpFile = 	process.env.NOTIFICATIONS_TMP;
 class Generic {
 	static async execCmd(cmd, verbose = false) {
 		$.verbose = verbose;
-		const output = (await $`${cmd}`).stdout.trim();
+		const output = (await zx.$`${cmd}`).stdout.trim();
 		console.log(output);
 	}
 
@@ -33,7 +41,7 @@ class Generic {
 		let data;
 		let path = join(process.env.NOTIFICATIONS_DIR, file);
 		try {
-			data = await fs.readJSON(`${path}.json`);
+			data = await zx.fs.readJSON(`${path}.json`);
 		}
 		catch (ex) {
 			Generic.exitWithError(`Error reading ${path}.json`, ex);
@@ -50,7 +58,7 @@ class Generic {
 
 	static exitWithError(err, msg) {
 		console.log(err);
-		console.error(chalk.red(msg));
+		console.error(zx.chalk.red(msg));
 		process.exit(1);
 	}
 

@@ -20,7 +20,7 @@ export XDG_RUNTIME_DIR=/run/user/1000
 # For index.mjs
 # ------------------
 export NOTIFICATIONS_DEBUG=0
-export NOTIFICATIONS_DIR=`realpath $PROJECT_DIR` # Put absolute path here
+export NOTIFICATIONS_DIR=`/opt/project` # Put absolute path to project here
 export NOTIFICATIONS_METHOD="kde-dialog" # kde-dialog, kde-popup, notify-send or zenity
 export NOTIFICATIONS_TIMEOUT=60000 # In ms
 export NOTIFICATIONS_TMP=/tmp/notifications
