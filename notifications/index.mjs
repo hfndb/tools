@@ -24,7 +24,7 @@ let cfg;
 let tasks;
 let nw = new Date();
 let debugMode = parseInt(process.env.NOTIFICATIONS_DEBUG) == 1 ? true : false;
-let tmpFile = 	process.env.NOTIFICATIONS_TMP;
+let tmpFile = process.env.NOTIFICATIONS_TMP;
 
 // --------------------------------------------------------------------
 // Functions, namespaced in classes
@@ -42,8 +42,7 @@ class Generic {
 		let path = join(process.env.NOTIFICATIONS_DIR, file);
 		try {
 			data = await zx.fs.readJSON(`${path}.json`);
-		}
-		catch (ex) {
+		} catch (ex) {
 			Generic.exitWithError(`Error reading ${path}.json`, ex);
 		}
 		return data;
@@ -52,7 +51,7 @@ class Generic {
 	static async triggerNotification(msg) {
 		// Add to temp file
 		writeFileSync(tmpFile, `${msg}\n`, {
-			flag: 'a'
+			flag: "a",
 		});
 	}
 
@@ -61,7 +60,6 @@ class Generic {
 		console.error(zx.chalk.red(msg));
 		process.exit(1);
 	}
-
 }
 
 class Task {
@@ -82,8 +80,8 @@ class Task {
 	 * See whether time task should run is already before current time
 	 */
 	afterEndOfTime(hours, minutes) {
-		let taskMinutes = (hours * 60) + minutes;
-		let nowMinutes = (nw.getHours() * 60) + nw.getMinutes() + 1;
+		let taskMinutes = hours * 60 + minutes;
+		let nowMinutes = nw.getHours() * 60 + nw.getMinutes() + 1;
 		return nowMinutes >= taskMinutes;
 	}
 
@@ -95,7 +93,7 @@ class Task {
 	}
 
 	finish() {
-		writeFileSync(this.path, '');
+		writeFileSync(this.path, "");
 	}
 }
 
@@ -132,10 +130,10 @@ class DailyOnce {
 // --------------------------------------------------------------------
 // Main
 // --------------------------------------------------------------------
-cfg = await Generic.readJson('config');
-tasks = await Generic.readJson('data');
+cfg = await Generic.readJson("config");
+tasks = await Generic.readJson("data");
 
-writeFileSync(tmpFile, ''); // Create clean temp file
+writeFileSync(tmpFile, ""); // Create clean temp file
 
 for (let i = 0; i < tasks.length; i++) {
 	let t = tasks[i];
@@ -145,6 +143,6 @@ for (let i = 0; i < tasks.length; i++) {
 			break;
 		case "daily-once":
 			await DailyOnce.process(t);
-		break;
+			break;
 	}
 }
