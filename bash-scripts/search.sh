@@ -38,7 +38,8 @@ then
 	# - r recursive
 	# - n line number
 else
-	RESULT=( $( grep -r -H "$SEARCH" $DIR* | sort -t: -u -k1,1 | cut -d: -f1 ) ) # Results to array
+#	RESULT=( $( grep -r -H "$SEARCH" $DIR* | sort -t: -u -k1,1 | cut -d: -f1 ) ) # Results to array
+	RESULT=( $( grep -r -H "$SEARCH" $DIR* | cut -d: -f1 | sort -u ) ) # Results to array
 	# Grep:
 	# - resursive (-r),
 	# - get file names (-H)
