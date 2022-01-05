@@ -31,8 +31,12 @@ fi
 
 if [ "$EDITOR" = "" ]
 then
-	find $DIR -iname "*$SEARCH*" -type f
+	find $DIR -path \*$SEARCH* -type f
 else
-	RESULT=( $( find $DIR -iname "*$SEARCH*" -type f ) ) # Results to array
-	$EDITOR "${RESULT[@]/#/}" # Spread array to parameters
+	RESULT=( $( find $DIR -path \*$SEARCH* -type f ) ) # Results to array
+	if [ ${#RESULT[*]} -gt 0 ]; then
+		$EDITOR "${RESULT[@]/#/}" # Spread array to parameters
+	else
+		echo "File name containing '$SEARCH' not found in $DIR"
+	fi
 fi

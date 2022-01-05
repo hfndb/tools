@@ -38,8 +38,8 @@ then
 	# - r recursive
 	# - n line number
 else
-#	RESULT=( $( grep -r -H "$SEARCH" $DIR* | sort -t: -u -k1,1 | cut -d: -f1 ) ) # Results to array
-	RESULT=( $( grep -r -H "$SEARCH" $DIR* | cut -d: -f1 | sort -u ) ) # Results to array
+#	RESULT=( $( grep -ir -H "$SEARCH" $DIR* | sort -t: -u -k1,1 | cut -d: -f1 ) ) # Results to array
+	RESULT=( $( grep -ir -H "$SEARCH" $DIR* | cut -d: -f1 | sort -u ) ) # Results to array
 	# Grep:
 	# - resursive (-r),
 	# - get file names (-H)
@@ -50,5 +50,10 @@ else
 	# Cut:
 	# - delimiter (-d:),
 	# - get first field, filename only (-f1)
-	$EDITOR "${RESULT[@]/#/}" # Spread array to parameters
+
+	if [ ${#RESULT[*]} -gt 0 ]; then
+		$EDITOR "${RESULT[@]/#/}" # Spread array to parameters
+	else
+		echo "String '$SEARCH' not found in $DIR"
+	fi
 fi
