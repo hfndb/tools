@@ -15,47 +15,50 @@ If you want to use [vim](https://en.wikipedia.org/wiki/Vim_(text_editor)), [gvim
 
 ```bash
 # Installation of vim:
-sudo apt-get install vim vim-addon-manager vim-youcompleteme ctags-exuberant universal-ctags ripgrep
+$ sudo apt-get install vim vim-addon-manager vim-youcompleteme ctags-exuberant universal-ctags ripgrep
 
 # Installation of fzf; fuzzy completion and fuzzy search with interactive finder
-git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
+$ git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 
 # Install code completion in ~/.vim
-vam install youcompleteme
+$ vam install youcompleteme
 
 # Install plugin manager https://github.com/junegunn/vim-plug (activated in .vimrc)
-wget https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -O ~/.vim/autoload/plug.vim
+$ wget https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim -O ~/.vim/autoload/plug.vim
 
 # If you don't have a file ~./.vimrc yet:
-cp /etc/vim/vimrc ~/.vimrc
+$ cp /etc/vim/vimrc ~/.vimrc
 
 # Add config in this directory to ~./.vimrc
-cat ./vimrc >> ~/.vimrc
+$ cat ./vimrc >> ~/.vimrc
 
 # Install plugins using vim-plug
-vim +PlugInstall +qall
+$ vim +PlugInstall +qall
 
 # Setings for generating tags, using ctags-exuberant or ctags-universal. More info see [here](../basch-script/tags-file.sh)
 
 # ctags-exuberant
-cp -af ./ctags.cfg ~/.ctags
+$ cp -af ./ctags.cfg ~/.ctags
 
 # ctags-universal
-cp -afr ./ctags.d ~/.ctags.d
+$ cp -afr ./ctags.d ~/.ctags.d
 
 # Installation of Gvim:
-sudo apt-get install vim-gtk3
+$ sudo apt-get install vim-gtk3
 
 # If you don't have a file ~./.gvimrc yet:
-cp /etc/vim/gvimrc ~/.gvimrc
+$ cp /etc/vim/gvimrc ~/.gvimrc
 
 # Add config in this directory to ~./.gvimrc
-cat ./vimrc >> ~/.gvimrc
+$ cat ./vimrc >> ~/.gvimrc
 
 # Installation of Neovim:
-sudo apt-get install neovim neovim-qt
-cp -ar ./nvim ~/.config/
+$ sudo apt-get install neovim neovim-qt
+$ cp -ar ./nvim ~/.config/
+
+# Installation of goodies
+$ sudo npm install -g dts-gen typescript typescript-language-server ts-node
 
 ```
 
