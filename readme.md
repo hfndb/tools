@@ -12,6 +12,8 @@ In this repo some notes and tools that I use in a Linux environment, [Kubuntu](h
 
 * Node scripts to clean bash history etc.
 
+* [Email](./email/readme.md) A little system to write and spell check email
+
 * [Notifications](./notifications/readme.md) Tiny application to show system notifications as a modal dialog or popups from the system tray: Birthdays, once a year and 'once a day notifications' like alarm signals or reminders.
 
 * [Vim](./vim/readme.md) with notes about installation, configuration and utility script(s)

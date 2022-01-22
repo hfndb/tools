@@ -19,6 +19,7 @@ fi
 
 LANG=$1
 DICT=words.$LANG.txt
+LOG=/tmp/words.txt
 SEARCH_FOR=$2
 SEARCH_FOR_LOWER=${SEARCH_FOR,,} # Search string in lower case
 SEARCH_FOR_UPPER=${SEARCH_FOR^^} # Search string in upper case
@@ -52,10 +53,13 @@ press_enter() {
   clear
 }
 
-search_pattern() {
-	grep -E "^[$SEARCH_FOR_LOWER$SEARCH_FOR_UPPER]+$" $DICT_DIR/$DICT | sort
+search_simple() {
+	grep -i $1 $DICT_DIR/$DICT | sort | tee $LOG
 }
 
+search_containing() {
+	grep -E "^[$SEARCH_FOR_LOWER$SEARCH_FOR_UPPER]+$" $DICT_DIR/$DICT | sort | tee $LOG
+}
 
 until [ "$SELECTION" = "0" ]; do
   clear
@@ -74,11 +78,11 @@ until [ "$SELECTION" = "0" ]; do
   read SELECTION
   echo ""
   case $SELECTION in
-    1  ) clear ; grep -i "$SEARCH_FOR"      $DICT_DIR/$DICT ; press_enter ;;
-    2  ) clear ; grep -i "^$SEARCH_FOR"     $DICT_DIR/$DICT ; press_enter ;;
-    3  ) clear ; grep -i "$SEARCH_FOR$"     $DICT_DIR/$DICT ; press_enter ;;
-    4  ) clear ; grep -i "^$SEARCH_FOR$"    $DICT_DIR/$DICT ; press_enter ;;
-    5  ) clear ; search_pattern                             ; press_enter ;;
+    1  ) clear ; search_simple "$SEARCH_FOR";   press_enter ;;
+    2  ) clear ; search_simple "^$SEARCH_FOR";  press_enter ;;
+    3  ) clear ; search_simple "$SEARCH_FOR$";  press_enter ;;
+    4  ) clear ; search_simple "^$SEARCH_FOR$"; press_enter ;;
+    5  ) clear ; search_containing;             press_enter ;;
     *  ) exit ;;
   esac
 done
