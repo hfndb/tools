@@ -42,6 +42,24 @@
 			body { color: #ebdbb2; background-color: #282828; } <!-- Gruvbox -->
 		}
 	</style>
+	<script>
+		// Some 'intellegence' while switching between editor and web browser
+		// Organize auto-refresh in web browser
+
+		var lr = Date.now(); // Last refresh
+
+		// Focus goes from text editor to web browser. Refresh page?
+		function refresh() {
+			// First check elapsed time since last refresh
+			var r =  Date.now();
+			if (r - lr < 1000) return; // Prevent loop
+
+			window.location.reload();
+			lr = r;
+		}
+
+		window.addEventListener('focus', refresh);
+	</script>
 </head>
 <body id="container">
 
