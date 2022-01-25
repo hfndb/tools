@@ -42,24 +42,6 @@
 			body { color: #ebdbb2; background-color: #282828; } <!-- Gruvbox -->
 		}
 	</style>
-	<script>
-		// Some 'intelligence' while switching between editor and web browser
-		// Organize auto-refresh in web browser
-
-		var lr = Date.now(); // Last refresh
-
-		// Focus goes from text editor to web browser. Refresh page?
-		function refresh() {
-			// First check elapsed time since last refresh
-			var r =  Date.now();
-			if (r - lr < 1000) return; // Prevent loop
-
-			window.location.reload();
-			lr = r;
-		}
-
-		window.addEventListener('focus', refresh);
-	</script>
 </head>
 <body id="container">
 
@@ -82,6 +64,29 @@
 </p>
 <!-- @ -->
 </div>
+<script>
+	// Some 'intelligence' while switching between editor and web browser
+	var lr = Date.now(); // Last refresh
 
+	// Force hyperlinks to open in a new tab
+	function openInTab() {
+		let lst = document.body.querySelectorAll("a");
+		for (let i = 0; i < lst.length; i++) {
+			lst[i].setAttribute("target", "_blank");
+		}
+	}
+
+	// Focus goes from text editor to web browser.
+	function refresh() {
+		// Refresh page? First check elapsed time since last refresh
+		openInTab();
+		var r =  Date.now();
+		if (r - lr < 1000) return; // Prevent loop
+		window.location.reload();
+	}
+
+	window.addEventListener('focus', refresh);
+	openInTab();
+</script>
 </body>
 </html>
