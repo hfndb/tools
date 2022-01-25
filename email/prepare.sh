@@ -9,7 +9,7 @@ fi
 
 LANGUAGE=$1
 if [ "$LANGUAGE" == "" ]; then
-	LANGUAGE=en
+	LANGUAGE=$DEFAULT_LANGUAGE
 fi
 
 # Extract email from template
