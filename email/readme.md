@@ -28,7 +28,7 @@ alias mp=/absolute/path/to/tools/email/prepare.sh
 # Usage: mp <language code, default en>
 
 # ms to strip <br> from sent emails, for the purpose of archiving
-alias mp=/absolute/path/to/tools/email/strip-br.mjs
+alias ms=/absolute/path/to/tools/email/strip-br.mjs
 ```
 
 
