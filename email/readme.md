@@ -28,7 +28,7 @@ alias mp=/absolute/path/to/tools/email/prepare.sh
 # Usage: mp <language code, default en>
 
 # ms to strip <br> from sent emails, for the purpose of archiving
-alias mp=/absolute/path/to/tools/email/prepare.sh
+alias mp=/absolute/path/to/tools/email/strip-br.mjs
 ```
 
 
@@ -54,4 +54,4 @@ One page or template is like a 'first time' for any kind of activity. Next time,
 
 Here you can see the risk of integrating standardized intelligence and styling from external servers. As an introduced risk, you make your activity dependent of whimps of others. Think of socalled 'breaking changes' which will coerce you into maintenance to neutralise 'special effects' caused by others.
 
-Therefore... it's always better to organize all intelligence, structure, styling yourself without creating an overdose dependencies towards others like (convenience or drug) addicts do. A robust way of thinking will hurt you (attention, energy, efforts needed by you) but also prevent the unnecessary pain of neutralising 'special effects' caused by others who you didn't even meet and perhaps controlled in a way you don't even know.
+Therefore... it's always better to organize all intelligence, structure, styling yourself without creating an overdose dependencies towards others like (convenience or drug) addicts do. A robust way of thinking will hurt you (attention, energy, efforts needed by you) but also prevent the unnecessary pain of neutralising 'special effects' caused by others who you didn't even meet and who are perhaps controlled in a way you don't even know.
