@@ -5,6 +5,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
 	<meta name="msapplication-config" content="none"/>
+	<base target=external-page />
 	<style type="text/css">
 		body {
 			background-color: #282828;
@@ -68,25 +69,15 @@
 	// Some 'intelligence' while switching between editor and web browser
 	var lr = Date.now(); // Last refresh
 
-	// Force hyperlinks to open in a new tab
-	function openInTab() {
-		let lst = document.body.querySelectorAll("a");
-		for (let i = 0; i < lst.length; i++) {
-			lst[i].setAttribute("target", "_blank");
-		}
-	}
-
 	// Focus goes from text editor to web browser.
 	function refresh() {
 		// Refresh page? First check elapsed time since last refresh
-		openInTab();
 		var r =  Date.now();
 		if (r - lr < 1000) return; // Prevent loop
 		window.location.reload();
 	}
 
 	window.addEventListener('focus', refresh);
-	openInTab();
 </script>
 </body>
 </html>
