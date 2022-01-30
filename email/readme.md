@@ -23,6 +23,9 @@ In ~/.basrc I have added aliasses:
 alias mi=/absolute/path/to/tools/email/init-writing.sh
 # Resulting temp file is bookmarked in web browser
 
+# mr to resume writing
+alias mi=/absolute/path/to/tools/email/resume-writing.sh
+
 # mp to prepare email for sending
 alias mp=/absolute/path/to/tools/email/prepare.sh
 # Usage: mp <language code, default en>
@@ -43,7 +46,7 @@ In this tiny project I used some languages. Compare this to one language you use
 
 This document is written in the Markdown (.md) language, translated to HTML markup by github.com. Initializing writing an email, and preparing for sending, in bash script (.sh). The email template (.html) is written in HTML for structure, CSS for 'cosmetics' of styling, JavaScript for some 'intelligence'. After the email is sent using an arbitrary email client, it is stripped of newline tags by JavaScript (.mjs) run as en ES module by a Node.js.
 
-How many languages were used in this tiny project? 5 languages used in 2 situations - browser as a 'face' in sight, interacting with what's inside a computer, not in sight.
+How many languages were used in this tiny project? 5 languages used in 3 situations - browser as a 'face' in sight, interacting with what's inside a computer, not in sight, and publishing this project to github.
 
 
 ### Structure

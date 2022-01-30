@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Prepare for sending
+
 cd `dirname $0`
 if [ -f ./custom/env.sh ]; then
 	source ./custom/env.sh
