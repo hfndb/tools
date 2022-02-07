@@ -13,7 +13,7 @@ In this repo some notes and tools that I use in a Linux environment, [Kubuntu](h
 * Node scripts:
   - clean-bash-history.mjs: Clean ~/.bash_history and append configured items
   - manage-git-remote.mjs: Manage remote repositories. Configure, create, install, list, auto-pack remotes, auto-pull remotes. Menu driven.
-	- srt.mjs: Convert .srt files for subtitles of films to readable .txt without time codes. And convert what's in a .txt file to .html (br tags added). Menu driven.
+  - srt.mjs: Convert .srt files for subtitles of films to readable .txt without time codes. And convert what's in a .txt file to .html (br tags added). Menu driven.
 
 * [Email](./email/readme.md) A little system to write and spell check email
 
