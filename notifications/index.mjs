@@ -119,6 +119,7 @@ class Birthday {
 class DailyOnce {
 	static async process(t) {
 		let tsk = new Task(t.id);
+		if (tsk.lastRunToday) return;
 		if (tsk.firstRun || tsk.afterEndOfTime(t.hour, t.minute)) {
 			await Generic.triggerNotification(t.descr);
 			tsk.finish();

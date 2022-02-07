@@ -1,7 +1,5 @@
 #! /usr/bin/env node
-import { homedir } from "os";
-import { dirname, join } from "path";
-import { fileURLToPath } from "url";
+import { Files, Misc, join, homedir } from "./lib.mjs";
 
 /**
  * Script to clean .bash_history in home directory
@@ -9,26 +7,21 @@ import { fileURLToPath } from "url";
  * Usage: clean-bash-history.mjs /path-to/config-file.json
  */
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const lib = await import(join(__dirname, "./lib.mjs"));
-let { argv, fs, checkFileExists } = lib;
-
 // --------------------------------------------------------------------
 // Declare, initialize variables
 // --------------------------------------------------------------------
 let paths = {
-	config: argv._[0],
+	config: Misc.getArg(),
 	hist: join(homedir(), ".bash_history"),
 };
 
 // Check and succeed or fail and exit
-checkFileExists(paths.config);
-checkFileExists(paths.hist);
+Files.pathExists(paths.config);
+Files.pathExists(paths.hist);
 
 // Read config and data
-let cfg = await fs.readJSON(paths.config);
-let data = await fs.readFile(paths.hist, "utf8");
+let cfg = await Files.readJSON(paths.config);
+let data = await Files.readFile(paths.hist);
 data = data.split("\n");
 
 // Loop existing data
@@ -55,6 +48,4 @@ for (let i = 0; i < data.length; i++) {
 data = result.sort().join("\n") + "\n\n" + cfg.append.join("\n") + "\n";
 
 // And... write
-await fs.outputFile(paths.hist, data);
-
-console.log(`${paths.hist} written`);
+await Files.writeFile(paths.hist, data);

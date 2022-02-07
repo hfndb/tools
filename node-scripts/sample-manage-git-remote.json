@@ -1,0 +1,12 @@
+{
+	"user": "me",
+	"server": "remote",
+	"repoPath": "/paht/to/git/repositories",
+	"autoPull": [0],
+	"items": [
+		[
+			"/path/to/local/repository",
+			"name-remote-repository"
+		]
+	]
+}
