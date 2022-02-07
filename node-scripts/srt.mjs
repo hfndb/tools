@@ -125,8 +125,8 @@ async function showMenu(urge) {
 I'm here to help, though respresented by this program.
 
 Your attention has been hijacked by a quatrobolical dilemma.
-My 'lemma' is that you 	have choices and you MUST react in one of 4 predefined ways.
-Of course I'm doing this with a higher purpose, so don't become too angry 😎
+My 'lemma' is that you have 4 choices and you MUST react in one of 4 predefined ways.
+Of course I'm doing this for a higher purpose, so don't become too angry 😎
 
 This was my whish for you. This program now demands that from you, believing in my divine power 😀
 
