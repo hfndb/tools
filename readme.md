@@ -3,7 +3,6 @@
 In this repo some notes and tools that I use in a Linux environment, [Kubuntu](https://kubuntu.org/).
 
 + Bash scripts to git commit, search for text, replace in text etc. If aliases are added in ~/.bashrc:
-
   - s - Search for a string in files within a certain directory
   - sf - Search on file name within a certain directory
   - r - Replace a string in files within a certain directory
@@ -15,9 +14,9 @@ In this repo some notes and tools that I use in a Linux environment, [Kubuntu](h
   - manage-git-remote.mjs: Manage remote repositories. Configure, create, install, list, auto-pack remotes, auto-pull remotes. Menu driven.
   - srt.mjs: Convert .srt files for subtitles of films to readable .txt without time codes. And convert what's in a .txt file to .html (br tags added). Menu driven.
 
-* [Email](./email/readme.md) A little system to write and spell check email
-
-* [Notifications](./notifications/readme.md) Tiny application to show system notifications as a modal dialog or popups from the system tray: Birthdays, once a year and 'once a day notifications' like alarm signals or reminders.
+* Programs:
+	- [Email](./programs/email/readme.md) Tiny system to write and spell check email
+	- [Notifications](./programs/notifications/readme.md) Tiny program to show system notifications as a modal dialog or popups from the system tray: Birthdays, once a year and 'once a day notifications' like alarm signals or reminders.
 
 * [Vim](./vim/readme.md) with notes about installation, configuration and utility script(s)
 

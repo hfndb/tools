@@ -20,18 +20,18 @@ In ~/.basrc I have added aliasses:
 
 ```bash
 # mi to initialize writing
-alias mi=/absolute/path/to/tools/email/init-writing.sh
+alias mi=/absolute/path/to/tools/programs/email/init-writing.sh
 # Resulting temp file is bookmarked in web browser
 
 # mr to resume writing
-alias mi=/absolute/path/to/tools/email/resume-writing.sh
+alias mi=/absolute/path/to/tools/programs/email/resume-writing.sh
 
 # mp to prepare email for sending
-alias mp=/absolute/path/to/tools/email/prepare.sh
+alias mp=/absolute/path/to/tools/programs/email/prepare.sh
 # Usage: mp <language code, default en>
 
 # ms to strip <br> from sent emails, for the purpose of archiving
-alias ms=/absolute/path/to/tools/email/strip-br.mjs
+alias ms=/absolute/path/to/tools/programs/email/strip-br.mjs
 ```
 
 
