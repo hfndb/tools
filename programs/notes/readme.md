@@ -24,9 +24,9 @@ Yes, I agree. Only using other terms, words, doesn't make a program really diffe
 | ---------------- | ----------------------------------------------------- |
 | boolean          |                                                       |
 | float            |                                                       |
-| integer          | Autocrement as default value included                 |
+| integer          | Autoincrement as default value included               |
 | string           | Unlimited lenght like blog or text in a database      |
-| date             | Now and 'last updated' as as default value included   |
+| date             | Now as as default value and 'last updated' included   |
 | datetime         | Idem dito                                             |
 | array            |                                                       |
 | object           |                                                       |
