@@ -36,7 +36,7 @@ Yes, I agree. Only using other terms, words, doesn't make a program really diffe
 
 While me was leading me, before shaping and structuring this program, I was thinking about imagery, requirements. Leading thoughts became:
 
-+ Reading notes from disk to memory, or writing notes from memory to disk, could have a lower priority than writing from memory to disk.
++ Reading notes from disk to memory, could have a lower priority than writing from memory to disk.
 + For reading from and writing to disk, the function of a [scribe](https://en.wikipedia.org/wiki/Scribe) (kinda monk) will be used. A 'specialist process' running seperately. For determining file names the function of a 'manager', integrated in the main process.
 + [Vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in) by using a propriety [file format](https://en.wikipedia.org/wiki/Database) should remain taboo.
 + Using [SQL-language](https://en.wikipedia.org/wiki/SQL) should remain taboo too, otherwise this program would 'smell and taste' too much like a database.
