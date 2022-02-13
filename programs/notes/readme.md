@@ -26,7 +26,7 @@ Yes, I agree. Only using other terms, words, doesn't make a program really diffe
 | float            |                                                       |
 | integer          | Autoincrement as default value included               |
 | string           | Unlimited lenght like blog or text in a database      |
-| date             | Now as as default value and 'last updated' included   |
+| date             | Now as default value and 'last updated' included      |
 | datetime         | Idem dito                                             |
 | array            |                                                       |
 | object           |                                                       |
@@ -37,7 +37,7 @@ Yes, I agree. Only using other terms, words, doesn't make a program really diffe
 While me was leading me, before shaping and structuring this program, I was thinking about imagery, requirements. Leading thoughts became:
 
 + Reading notes from disk to memory, could have a lower priority than writing from memory to disk.
-+ For reading from and writing to disk, the function of a [scribe](https://en.wikipedia.org/wiki/Scribe) (kinda monk) will be used. A 'specialist process'. For determining file names the function of a 'manager', integrated in the main process. As an independent, I don't like the idea of personnel. But thinking about that... when you dig into your memory for notes, where does divine information come from? The deeper inside, the more likely that false prophets are not actively involved 😄
++ For reading from and writing to disk, the function of a [scribe](https://en.wikipedia.org/wiki/Scribe) (kinda monk) will be used. For determining file names the function of a 'manager'. As an independent, I don't like the idea of personnel. But thinking about that... when you dig into your memory for notes, where does divine information come from? The deeper inside, the more likely that false prophets are not actively involved 😄
 + [Vendor lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in) by using a propriety [file format](https://en.wikipedia.org/wiki/Database) should remain taboo.
 + Using [SQL-language](https://en.wikipedia.org/wiki/SQL) should remain taboo too, otherwise this program would 'smell and taste' too much like a database.
 + This program should not only work within one process, but also with multiple processes running. Even in a situation like [distributed computing](https://en.wikipedia.org/wiki/Distributed_computing) in which this program would behave like a [distributed database](https://en.wikipedia.org/wiki/Distributed_database) or [distributed data store](https://en.wikipedia.org/wiki/Distributed_data_store).
