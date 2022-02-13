@@ -63,4 +63,3 @@ Via these generic files, dependencies came into this project:
 + [date-and-time](https://www.npmjs.com/package/date-and-time) to format and manipulate dates and times
 + [fdir](https://www.npmjs.com/package/fdir) to scan directories and files
 + [shelljs](https://www.npmjs.com/package/shelljs) for Linux-like commands, made portable to Windows
-date-and-time
