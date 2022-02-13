@@ -33,9 +33,25 @@ if [ $REPLACE_P -eq 1 ]; then
 fi
 
 # Check spell with spell check
-aspell -l $LANGUAGE -c $FILE_TMP
+aspell \
+	--backup \
+	--lang=$LANGUAGE \
+	--mode=html \
+	--personal=~/.aspell.$LANGUAGE.pws \
+	-c $FILE_TMP
+
+echo $'\nAfter your corrections, spell checker sounds the alarm about these words:\n'
+aspell \
+	--lang=$LANGUAGE \
+	--list \
+	--mode=html \
+	--personal=~/.aspell.$LANGUAGE.pws \
+	< $FILE_TMP
+
 
 # Open temp file in editor
 $EDITOR $FILE_TMP
 
-echo "File $FILE_TMP ready for email client"
+echo "
+File $FILE_TMP ready for email client
+"
