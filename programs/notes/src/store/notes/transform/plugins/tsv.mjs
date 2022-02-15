@@ -1,12 +1,39 @@
 "use strict";
 
 /** Transform variants aka types to string vice versa
- *
- * TODO consider [newline] and [tab] in string value
  */
-export default class FormatPlugin {
+export default class TsvPlugin {
 	ext = ".tsv";
 	name = "tsv";
+
+	/**
+	 * Temp replacers for... in string variant.
+	 *
+	 * Newline
+	 * Used: Because sign
+	 *
+	 * Tab
+	 * Used: Therefore sign
+	 *
+	 * @see https://en.wikipedia.org/wiki/Therefore_sign
+	 *
+	 * If control codes for newline or tab are used in a note,
+	 * they will be permanently be replaced by ⊥ (falsum symbol)
+	 *
+	 * @see https://en.wikipedia.org/wiki/Falsum
+	 */
+	static replacers = {
+		newline: {
+			regexFrom: /∴/gm,
+			regexTo: /\n/gm,
+			sign: "∴",
+		},
+		tab: {
+			regexFrom: /∵/gm,
+			regexTo: /\t/gm,
+			sign: "∵",
+		}
+	}
 
 	/**
 	 * String to variant
@@ -16,7 +43,7 @@ export default class FormatPlugin {
 	 * @param {string} val Value
 	 * @returns {*}
 	 */
-	str2variant(variant, val) {
+	string2variant(variant, val) {
 		let rt = val;
 
 		switch (variant) {
@@ -28,6 +55,11 @@ export default class FormatPlugin {
 				break;
 			case "int":
 				rt = parseInt(val);
+				break;
+			case "string":
+				rt = val
+					.replace(TsvPlugin.replacers.newline.regexFrom, "\n")
+					.replace(TsvPlugin.replacers.tab.regexFrom, "\t");
 				break;
 			case "date":
 				rt = new Date(
@@ -64,18 +96,25 @@ export default class FormatPlugin {
 	 * @returns {string}
 	 */
 	variant2string(variant, val) {
+		let rt = val;
+
 		switch (variant) {
 			case "boolean":
-				val = val ? "1" : "0";
+				rt = val ? "1" : "0";
 				break;
 			case "float":
 			case "int":
-				val = val.toString();
+				rt = val.toString();
+				break;
+			case "string":
+				rt = val
+					.replace(TsvPlugin.replacers.newline.regexTo, TsvPlugin.replacers.newline.sign)
+					.replace(TsvPlugin.replacers.tab.regexTo, TsvPlugin.replacers.tab.sign);
 				break;
 			case "date":
 			case "datetime":
-				if (!val) return val; // Empty date
-				val =
+				if (!rt) return rt; // Empty date
+				rt =
 					val.getFullYear().toString() +
 					val
 						.getMonth()
@@ -87,7 +126,7 @@ export default class FormatPlugin {
 						.padStart(2, "0");
 
 				if (variant == "datetime")
-					val +=
+					rt +=
 						val
 							.getHours()
 							.toString()
@@ -99,10 +138,10 @@ export default class FormatPlugin {
 				break;
 			case "array":
 			case "object":
-				val = JSON.stringify(val);
+				rt = JSON.stringify(val);
 				break;
 		}
-		return val;
+		return rt;
 	}
 
 	/**
@@ -143,7 +182,7 @@ export default class FormatPlugin {
 				tr[part.name] = null;
 				continue;
 			}
-			tr[part.name] = this.str2variant(part.variant, val);
+			tr[part.name] = this.string2variant(part.variant, val);
 		}
 
 		return tr;

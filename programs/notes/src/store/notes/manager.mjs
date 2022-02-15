@@ -8,46 +8,83 @@ import { exec, test, touch, fdir, FileUtils, Notes } from "./index.mjs";
  * Files maintained:
  * - [topic name]/structure.json
  *     Structure of topic
- * - [topic name]/[structure name]/[serverName]/merged.[ext]
- * - [topic name]/[structure name]/[serverName]/[pid]/current.[ext]
- * - [topic name]/[structure name]/[serverName]/[pid]/[sequence number].[ext]
- *     Sequence number starts with 1, goes to 100 and then cycles back to 1
+ * - [topic name]/[structure name]/[server name]/merged.[ext]
+ * - [topic name]/[structure name]/[server name]/[pid]/current.[ext]
+ * - [topic name]/[structure name]/[server name]/[pid]/[sequence number].[ext]
  */
 export class StoreManager {
+	static topics = {};
+
+	/**
+	 * @private
+	 * @var {Kitchen}
+	 */
+	static _instance;
+
+	/**
+	 * Singleton factory to get instance
+	 *
+	 * @returns {Kitchen}
+	 */
+	static async getInstance() {
+		if (!StoreManager._instance) {
+			StoreManager._instance = new StoreManager();
+		}
+		return StoreManager._instance;
+	}
+
 	/**
 	 * @param {Object} tpc Structure of topic
 	 */
-	constructor(tpc) {
-		this.ext = tpc.transformer.ext;
-		this.dir = join(Notes.options.dir, tpc.name);
-
-		FileUtils.mkdir(this.dir);
-
-		this.files = {
-			current: join(Notes.options.domain, pid.toString(), "current" + this.ext),
-			merged: join(Notes.options.domain, "merged." + this.ext),
-			structure: "structure.json",
-			queue: [],
+	add(tpc) {
+		let toAdd = {
+			ext: tpc.transformer.ext,
+			dir: join(Notes.options.dir, tpc.name),
+			files: {
+				merged: join(Notes.options.domain, "merged." + tpc.transformer.ext),
+				structure: "structure.json",
+				queue: [],
+			},
 		};
 
-		if (!test("-f", join(this.dir, this.files.structure))) {
-			FileUtils.writeJsonFile(tpc, this.dir, this.files.structure, true);
+		FileUtils.mkdir(toAdd.dir);
+
+		if (!test("-f", join(toAdd.dir, toAdd.files.structure))) {
+			FileUtils.writeJsonFile(tpc, toAdd.dir, toAdd.files.structure, true);
 		}
 
-		let path = join(this.dir, Notes.options.domain, pid.toString());
-		FileUtils.mkdir(path);
+		StoreManager.topics[tpc.name] = toAdd;
 
-		let file = join(this.dir, this.files.current);
-		if (!test("-f", file)) touch(file);
-		file = join(this.dir, this.files.merged);
+		this.getCurrent(tpc); // Force creation of 'current' file
+
+		let file = join(toAdd.dir, toAdd.files.merged);
 		if (!test("-f", file)) touch(file);
 	}
 
-	/** Get next filename for queue, or all found queue files.
-	 * Repeating cyles from 1 to 100r.
+	/** Get current file for topic
+	 *
+	 * @param {Object} tpc Structure of topic
+	 * @returns {string} Full absolute path
 	 */
-	getNextQueueFile() {
-		let path = join(this.dir, Notes.options.domain, pid.toString());
+	getCurrent(tpc) {
+		let crrnt = StoreManager.topics[tpc.name];
+		let path = join(crrnt.dir, Notes.options.domain, pid.toString());
+		FileUtils.mkdir(path);
+
+		let file = join(crrnt.dir, "current" + crrnt.ext);
+		if (!test("-f", file)) touch(file);
+
+		return file;
+	}
+
+	/** Get next filename for queue.
+	 *
+	 * @param {Object} tpc Structure of topic
+	 * @returns {string} Full absolute path
+	 */
+	getNextQueueFile(tpc) {
+		let crrnt = StoreManager.topics[tpc.name];
+		let path = join(crrnt.dir, Notes.options.domain, pid.toString());
 		FileUtils.mkdir(path);
 
 		const fl = new fdir()
@@ -63,8 +100,16 @@ export class StoreManager {
 			if (f == "current") continue;
 			max = Math.max(max, parseInt(f));
 		}
-		if (max > 100) max = 1;
+		if (max >= 9999999) max = 1; // Cycle after 7 * '9'
 
-		return max.toString().padStart(7, "0").concat(this.ext);
+		return join(
+			crrnt.dir,
+			Notes.options.domain,
+			pid.toString(),
+			max
+				.toString()
+				.padStart(7, "0")
+				.concat(crrnt.ext),
+		);
 	}
 }

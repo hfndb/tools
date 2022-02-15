@@ -8,8 +8,6 @@ import { Kitchen, Recipe } from "../structure.mjs";
 class Howto {
 	/**
 	 * Adding a note
-	 *
-	 * @todo Updating file system not implemented fully
 	 */
 	async add() {
 		// Get instance of Topic
@@ -31,5 +29,12 @@ class Howto {
 		 *
 		 * Batch with added notes can be found in the array Kitchen.notes
 		 */
+
+		await kitchen.retain(); // Elsewhere known as 'save' or 'update'
+
+		// If you want new keys of written notes NOW, then:
+		await kitchen.coerce2write();
+		// If you don't use this coercive methode, notes will be written
+		// in a way which is optimized for the file system.
 	}
 }
