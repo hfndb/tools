@@ -1,31 +1,31 @@
 "use strict";
-
 /**
  * Principle:
- * Alternative to create and maintain a strict que for specific activity
- * to prevent concurrent activity.
+ *     Alternative to create and maintain a strict queue for specific activity
+ *     to prevent concurrent activity.
  *
  * Method:
- * Keeps a register, queues with requests.
- * Each kind of activity has a unique identifier.
- * From there a matter like waiting for your turn in a queue.
+ *     Keeps a register, queues with requests.
+ *     Each kind of activity has a unique identifier.
+ *     From there a matter like waiting for your turn in a queue.
  *
  * Applied hack:
- * Principle as in a shop:
- *   If you make a promise, you will fulfill that. Or not.
- *   In a waiting queue, an expectation is not fulfilled by you but from the outside.
- * Principle as in a court system:
- *   A judge can't use a promise, but wants a witness to fullfil an expectation.
- *   "Next witness please. Do you solemnly swear to..."
- *   is like hacking a psyche to magically create a promise within a witness to
- *   create or uphold an expectation from a judge that will be fulfilled by a witness.
+ *   - Principle as in a shop:
+ *     If you make a promise, you will fulfill that. Or not.
+ *     In a waiting queue, an expectation is not fulfilled by you but from the outside.
  *
- * In JavaSscript, a Promise is fulfilled from within outwards.
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
- * In the code below, a hack for a Promise changes this standard behavior,
- * to behavior like in a waiting queue.
+ *   - Principle as in a court system:
+ *     A judge can't use a promise, but wants a witness to fullfil an expectation.
+ *     "Next witness please. Do you solemnly swear to..."
+ *     is like hacking a psyche to magically create a promise within a witness to
+ *     create or uphold an expectation from a judge that will be fulfilled by a witness.
  *
- * Application of this principle:
+ *   - In JavaSscript, a Promise is fulfilled from within outwards.
+ *     In the code below, a hack for a Promise changes this standard behavior,
+ *     to behavior like in a waiting queue, queued expectations so to say.
+ *     @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise
+ *
+ * Applications of this principle:
  *
  * @example
  * // Lock access to a file, thus preventing writing and afterwards removing an additional .lock file
@@ -58,7 +58,7 @@ export class Queues {
 		// If busy for key, return
 		if (Queues.queue[key].q.length == 0) return;
 
-		// Mark key key as busy
+		// Mark key as busy
 		Queues.queue[key].b = true;
 
 		// Get next shift in this queue, remove from array

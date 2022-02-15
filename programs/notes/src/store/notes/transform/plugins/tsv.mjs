@@ -5,6 +5,7 @@
  * TODO consider [newline] and [tab] in string value
  */
 export default class FormatPlugin {
+	ext = ".tsv";
 	name = "tsv";
 
 	/**

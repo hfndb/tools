@@ -10,23 +10,23 @@ import { exec, test, touch, fdir, FileUtils, Notes } from "./index.mjs";
  *     Structure of topic
  * - [topic name]/[structure name]/[serverName]/merged.[ext]
  * - [topic name]/[structure name]/[serverName]/[pid]/current.[ext]
- * - [topic name]/[structure name]/[serverName]/[pid]/[index number].[ext]
- *     Index number starts with 1, goes to 100 and then cycles back to 1
+ * - [topic name]/[structure name]/[serverName]/[pid]/[sequence number].[ext]
+ *     Sequence number starts with 1, goes to 100 and then cycles back to 1
  */
 export class StoreManager {
 	/**
 	 * @param {Object} tpc Structure of topic
 	 */
 	constructor(tpc) {
-		this.ext = tpc.transformer.name;
+		this.ext = tpc.transformer.ext;
 		this.dir = join(Notes.options.dir, tpc.name);
 
 		FileUtils.mkdir(this.dir);
 
 		this.files = {
-			current: join(Notes.options.domain, pid.toString(), "current." + this.ext),
+			current: join(Notes.options.domain, pid.toString(), "current" + this.ext),
 			merged: join(Notes.options.domain, "merged." + this.ext),
-			structure:  "structure.json",
+			structure: "structure.json",
 			queue: [],
 		};
 
@@ -41,37 +41,30 @@ export class StoreManager {
 		if (!test("-f", file)) touch(file);
 		file = join(this.dir, this.files.merged);
 		if (!test("-f", file)) touch(file);
-
-		this.getNextQueueFile();
 	}
 
 	/** Get next filename for queue, or all found queue files.
-	 * Works towards version 100, needs to called again to rollover.
+	 * Repeating cyles from 1 to 100r.
 	 */
 	getNextQueueFile() {
 		let path = join(this.dir, Notes.options.domain, pid.toString());
 		FileUtils.mkdir(path);
 
-		const fl = new fdir().crawlWithOptions(path, {
-			group: true,
-		}).sync();
-
+		const fl = new fdir()
+			.crawlWithOptions(path, {
+				group: true,
+			})
+			.sync();
 		let files = fl[0].files;
 
-		console.log(files);
-		return;
-
-		let lst = [],
-			rt = "",
-			file,
-			nr;
-		for (let i = 0; i < 100; i++) {
-			nr = i.toString().padStart(3, "0");
-			file = `${Notes.vars.serverName}-queue-${nr + 1}`;
-			if (!test("-f", join(path, file))) {
-				if (!rt) rt = file;
-			} else if (all) lst.push(rt);
+		let max = 1;
+		for (let i = 0; i < files.length; i++) {
+			let f = files[i].substring(0, 7);
+			if (f == "current") continue;
+			max = Math.max(max, parseInt(f));
 		}
-		return all ? lst : rt;
+		if (max > 100) max = 1;
+
+		return max.toString().padStart(7, "0").concat(this.ext);
 	}
 }

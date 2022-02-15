@@ -98,6 +98,6 @@ export async function test() {
 	// -----------------------------------------------------------------------------------
 	// Section: Generic statistics
 	// -----------------------------------------------------------------------------------
-	log.info(`Vars:\n}`, Notes.vars);
+	//log.info(`Vars:\n}`, Notes.vars);
 	log.info(`Stats:\n${Notes.getStats()}`);
 }
