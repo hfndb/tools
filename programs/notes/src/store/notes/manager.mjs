@@ -1,6 +1,5 @@
 "use strict";
 import { join, sep } from "path";
-import { pid } from "process";
 import { exec, test, touch, fdir, FileUtils, Notes } from "./index.mjs";
 
 /** Manage files
@@ -63,15 +62,17 @@ export class StoreManager {
 
 	/** Get current file for topic
 	 *
-	 * @param {Object} tpc Structure of topic
+	 * @param {Topic} tpc Topic
+	 * @param {string} strctr Name of structure
+	 * @param {string} server Name of server
 	 * @returns {string} Full absolute path
 	 */
-	getCurrent(tpc) {
+	getCurrent(tpc, strctr, server) {
 		let crrnt = StoreManager.topics[tpc.name];
-		let path = join(crrnt.dir, Notes.options.domain, pid.toString());
+		let path = join(crrnt.dir, strctr, server, pid);
 		FileUtils.mkdir(path);
 
-		let file = join(crrnt.dir, "current" + crrnt.ext);
+		let file = join(path, "current" + crrnt.ext);
 		if (!test("-f", file)) touch(file);
 
 		return file;
@@ -79,12 +80,15 @@ export class StoreManager {
 
 	/** Get next filename for queue.
 	 *
-	 * @param {Object} tpc Structure of topic
+	 * @param {Topic} tpc Topic
+	 * @param {string} strctr Name of structure
+	 * @param {string} server Name of server
+	 * @param {string} pid
 	 * @returns {string} Full absolute path
 	 */
-	getNextQueueFile(tpc) {
+	getNextQueueFile(tpc, strctr, server, pid) {
 		let crrnt = StoreManager.topics[tpc.name];
-		let path = join(crrnt.dir, Notes.options.domain, pid.toString());
+		let path = join(crrnt.dir, strctr, server, pid);
 		FileUtils.mkdir(path);
 
 		const fl = new fdir()
@@ -103,9 +107,7 @@ export class StoreManager {
 		if (max >= 9999999) max = 1; // Cycle after 7 * '9'
 
 		return join(
-			crrnt.dir,
-			Notes.options.domain,
-			pid.toString(),
+			path,
 			max
 				.toString()
 				.padStart(7, "0")

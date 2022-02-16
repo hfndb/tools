@@ -7,96 +7,118 @@ import { FileUtils } from "./files.mjs";
 import { getDirList } from "./dirs.mjs";
 const { test } = shelljs;
 
+let log = Logger.getInstance();
+
+/** @typedef WatchOptions
+ * @property {string} workingDir
+ * @property {string} path
+ * @property {string} description
+ * @property {number} timeout
+ * @property {boolean} [verbose] Default true
+ * @property {boolean} [forceDirWatch] Default false
+ */
+
 /**
  * Class to organize file watching
  */
 export class FileWatcher {
-	constructor(
-		workingDir,
-		projectDir,
-		path,
-		timeout,
-		description,
-		verbose = true,
-	) {
-		this.nowChanging = [];
+	/**
+	 * @param {WatchOptions} opts
+	 */
+	constructor(opts) {
+		if (opts.verbose == undefined) opts.verbose = true;
+		if (opts.forceDirWatch == undefined) opts.forceDirWatch = false;
+
+		this.files = {};
+		this.file = opts.file = "";
 		this.watchers = [];
-		this.description = description;
-		this.timeout = timeout;
-		this.addWatch(workingDir, projectDir, path, verbose);
-	}
+		this.workingDir = opts.workingDir;
 
-	addWatch(workingDir, projectDir, path, verbose = true) {
-		let log = Logger.getInstance();
-		let fullPath = join(workingDir, projectDir, path);
-
-		if (!test("-e", fullPath)) {
+		if (!test("-e", this.workingDir)) {
 			log.info(
-				`Path ./${join(projectDir, path)} doesn't exist. Request to watch ${
-					this.description
-				} ignored`,
+				`Path ${opts.path} doesn't exist. Request to watch ${this.description} ignored`,
 			);
 			return;
 		}
-		let isDir = test("-d", fullPath);
-		if (!isDir) {
-			fullPath = join(workingDir, projectDir); // Watch directory, not file (workaround for bug in Node.js)
+
+		this.isFile = test("-f", this.workingDir);
+		if (this.isFile) {
+			opts.file = opts.path;
+			opts.path = "";
 		}
 
+		this.addWatch(opts);
+
+		// Unfortunately, recursive watching of subdirs doesn't work (properly) on all platforms
+		// Workaround: Watch for all files in directory.
+		let fullPath = join(opts.workingDir, opts.path, opts.file);
+		if (!test("-f", fullPath)) {
+			let dirs = getDirList(fullPath);
+			for (let i = 0; i < dirs.length; i++) {
+				let tmp = Object.assign({}, opts);
+				tmp.file = dirs[i];
+				tmp.verbose = false;
+				this.addWatch(tmp);
+			}
+		}
+	}
+
+	addWatch(settings) {
 		this.watchers.push(
 			watch(
-				fullPath,
+				join(settings.workingDir, settings.path, settings.file),
 				{
 					persistent: true,
 					recursive: false,
 					encoding: FileUtils.ENCODING_UTF8,
 				},
-				(event, filename) => {
-					if (!filename) return;
-					let file = isDir ? filename.toString() : path;
-					if (isDir && !test("-f", join(fullPath, file))) {
-						// File deleted. The 'rename' event occurs when:
+				(event, file) => {
+					if (!file || file.endsWith("swp")) return;
+					let changed, fullPath, tmp;
+
+					let scenario = ["", settings.file, join(settings.file, file)];
+
+					for (let i = 0; !fullPath && i < scenario.length; i++) {
+						tmp = join(this.workingDir, settings.path, scenario[i]);
+						if (test("-f", tmp)) {
+							if (scenario[i]) {
+								// Scenario of dir watch
+								changed = scenario[i];
+								fullPath = join(this.workingDir, settings.path, changed);
+							} else {
+								// Scenario of file watch
+								changed = settings.path;
+								fullPath = join(this.workingDir, changed);
+							}
+						}
+					}
+
+					if (!fullPath || !test("-f", fullPath)) {
+						// File couldn't be found or is deleted.
+						// The 'rename' event occurs when:
 						// - a new file is added,
 						// - a file is deleted,
 						// - buffer file is deleted - some text editor don't simply overwrite
-						// log.warn(`File ./${join(fullPath, file)} is deleted`);
-						return;
-					} else if (isDir) {
-						file = join(path, file); // Example: files.ts becomes lib/files.ts
-					} else if (!isDir && filename != path) {
-						// Seems to be a buffer file
+						// log.warn(`File ./${join(opts.workingDir, file)} is deleted`);
 						return;
 					}
 
 					// Delaying mechanisme to prevent a phenomenon like "contact bounce"
 					// https://en.wikipedia.org/wiki/Switch#Contact_bounce
-					if (this.nowChanging.includes(file)) return;
-
-					let recycle = this.nowChanging.indexOf("-");
-					if (recycle >= 0) {
-						this.nowChanging[recycle] = file;
-					} else {
-						this.nowChanging.push(file);
+					if (this.files[changed]) {
+						if (Date.now() - this.files[changed] < settings.timeout) {
+							return;
+						}
 					}
+					this.files[changed] = Date.now();
 
-					// Bug in node.js (respond time)
-					// See https://github.com/gruntjs/grunt-contrib-watch/issues/13
-					setTimeout(() => {
-						this.nowChanging[this.nowChanging.indexOf(file)] = "-"; // ready for recycling
-						this.change(event, file);
-					}, this.timeout);
+					this.change(event, changed);
 				},
 			),
 		);
-		// Unfortunately, recursive watching of subdirs doesn't work (properly) on all platforms
-		// Workaround: This method will call itself recursively
-		if (isDir) {
-			getDirList(join(workingDir, projectDir, path)).forEach(dir => {
-				this.addWatch(workingDir, projectDir, join(path, dir), false);
-			});
-		}
-		if (verbose) {
-			log.info(`Watching ${this.description} for changes`);
+
+		if (settings.verbose) {
+			log.info(`Watching ${settings.description} for changes`);
 		}
 	}
 

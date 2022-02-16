@@ -1,6 +1,7 @@
+#! /usr/bin/env node
 "use strict";
 import { randomUUID } from "crypto";
-import { log, Notes } from "./index.mjs";
+import { StringExt, log, Notes } from "./index.mjs";
 import { Note, Part, Structure, Topic } from "./index.mjs";
 import { Kitchen, Recipe } from "./howto/structure.mjs";
 import { Transformer } from "./transform/transformer.mjs";
@@ -92,12 +93,16 @@ export async function test() {
 	// Statistics for adding notes
 	log.info(`Notes added but not written yet: ${vars.nr}`);
 
-	let timeElapsed = performance.now() - vars.start;
-	log.info(`Time needed: ${Transformer.microSeconds2string(timeElapsed)}`);
+	let now = performance.now();
+	let timeElapsed = now - vars.start;
+	log.info(`Time needed: ${StringExt.microSeconds2string(timeElapsed)}`);
+
+	await log.info(kitchen.retain());
 
 	// -----------------------------------------------------------------------------------
 	// Section: Generic statistics
 	// -----------------------------------------------------------------------------------
-	//log.info(`Vars:\n}`, Notes.vars);
 	log.info(`Stats:\n${Notes.getStats()}`);
 }
+
+await test();

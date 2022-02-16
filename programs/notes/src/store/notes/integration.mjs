@@ -2,6 +2,7 @@
 import { AppConfig } from "../../config.mjs";
 import { Logger } from "../../log.mjs";
 import { Notes } from "./index.mjs";
+import { setup } from "./standalone.mjs";
 
 /**
  * Function to integrate notes into a cookware product;
@@ -15,5 +16,5 @@ export function integrate() {
 	Notes.vars.serverName = cfg.options.server.name;
 	Notes.options.domain = cfg.options.domain.domain;
 
-	Notes.setLogger(Logger.getInstance());
+	setup(Logger.getInstance());
 }

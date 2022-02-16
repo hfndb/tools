@@ -1,5 +1,5 @@
 "use strict";
-import { Kitchen, Recipe } from "../structure.mjs";
+import { Kitchen, Recipe } from "./structure.mjs";
 
 /**
  * Howto's about usage, in function blocks
@@ -26,8 +26,6 @@ class Howto {
 		 * -2 if (for example checking required parts) failed,
 		 * -1 if not written yet,
 		 * >= 0 for key in file system (compare with auto-increment in database)
-		 *
-		 * Batch with added notes can be found in the array Kitchen.notes
 		 */
 
 		await kitchen.retain(); // Elsewhere known as 'save' or 'update'
