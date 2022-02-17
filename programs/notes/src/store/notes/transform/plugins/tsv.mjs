@@ -32,8 +32,8 @@ export default class TsvPlugin {
 			regexFrom: /∵/gm,
 			regexTo: /\t/gm,
 			sign: "∵",
-		}
-	}
+		},
+	};
 
 	/**
 	 * String to variant
@@ -108,7 +108,10 @@ export default class TsvPlugin {
 				break;
 			case "string":
 				rt = val
-					.replace(TsvPlugin.replacers.newline.regexTo, TsvPlugin.replacers.newline.sign)
+					.replace(
+						TsvPlugin.replacers.newline.regexTo,
+						TsvPlugin.replacers.newline.sign,
+					)
 					.replace(TsvPlugin.replacers.tab.regexTo, TsvPlugin.replacers.tab.sign);
 				break;
 			case "date":
@@ -158,7 +161,7 @@ export default class TsvPlugin {
 			val = obj[part.name];
 			ta.push(this.variant2string(part.variant, val));
 		}
-		return ta.join("\t");
+		return ta.join("\t") + "\n";
 	}
 
 	/**

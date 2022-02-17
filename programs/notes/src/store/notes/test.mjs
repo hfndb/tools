@@ -1,10 +1,14 @@
 #! /usr/bin/env node
 "use strict";
+import { Logger } from "../../../generic/log.mjs";
 import { randomUUID } from "crypto";
-import { StringExt, log, Notes } from "./index.mjs";
+import { StringExt, Notes } from "./index.mjs";
 import { Note, Part, Structure, Topic } from "./index.mjs";
+import { logOptions } from "./standalone.mjs";
 import { Kitchen, Recipe } from "./howto/structure.mjs";
 import { Transformer } from "./transform/transformer.mjs";
+
+let log = Logger.getInstance(logOptions); // Avoid errors during standalone tests
 
 // -----------------------------------------------------------------------------------
 // Section: Test for adding notes
@@ -15,6 +19,7 @@ let vars = {
 	interval: 50,
 	lastDate: new Date(2000, 1, 1),
 	nr: 0,
+	runs: 1,
 	show: {
 		lastNote: false,
 		notes: false,
@@ -95,9 +100,14 @@ export async function test() {
 
 	let now = performance.now();
 	let timeElapsed = now - vars.start;
-	log.info(`Time needed: ${StringExt.microSeconds2string(timeElapsed)}`);
+	log.info(`Time needed to add: ${StringExt.microSeconds2string(timeElapsed)}`);
 
-	await log.info(kitchen.retain());
+	now = performance.now();
+	await kitchen.retain(Recipe);
+	timeElapsed = now - vars.start - timeElapsed;
+	log.info(
+		`Time needed to retain: ${StringExt.microSeconds2string(timeElapsed)}`,
+	);
 
 	// -----------------------------------------------------------------------------------
 	// Section: Generic statistics
@@ -105,4 +115,6 @@ export async function test() {
 	log.info(`Stats:\n${Notes.getStats()}`);
 }
 
-await test();
+for (let i = 0; i < vars.runs; i++) {
+	await test();
+}

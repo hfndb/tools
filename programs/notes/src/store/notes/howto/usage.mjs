@@ -28,7 +28,8 @@ class Howto {
 		 * >= 0 for key in file system (compare with auto-increment in database)
 		 */
 
-		await kitchen.retain(); // Elsewhere known as 'save' or 'update'
+		// Elsewhere known as 'save' or 'update'
+		await kitchen.retain(Recipe); // Only all new notes for Recipe in Kitchen
 
 		// If you want new keys of written notes NOW, then:
 		await kitchen.coerce2write();
