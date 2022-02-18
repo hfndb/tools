@@ -3,8 +3,18 @@ import { Buffer } from "buffer";
 import { appendFileSync } from "fs";
 import { join } from "path";
 import { Queues } from "../../../queue.mjs";
-import { mv, test, touch, FileUtils, log, Notes, Note } from "../index.mjs";
+import {
+	mv,
+	test,
+	touch,
+	FileUtils,
+	log,
+	Notes,
+	Note,
+	Topic,
+} from "../index.mjs";
 import { StoreManager } from "../manager.mjs";
+import { Reader } from "./read.mjs";
 
 /**
  * Approach:
@@ -28,25 +38,6 @@ export class Writer {
 	success = true;
 
 	path = ""; // To 'current'
-
-	/**
-	 * Called at the beginning of append()
-	 *
-	 * @param {string} tpc
-	 * @param {boolean} [queue] Use queue
-	 */
-	static async keysRead(tpc, queue = false) {
-		let path = join(
-			StoreManager.topics[tpc].dir,
-			StoreManager.topics[tpc].files.keys,
-		);
-		if (queue) await Queues.get(path); // Just to be sure
-
-		let bgn = performance.now();
-		let rt = FileUtils.readJsonFile(path);
-		Notes.addRead(performance.now() - bgn, JSON.stringify(rt));
-		return rt;
-	}
 
 	/**
 	 * Called at the end of append()
@@ -78,7 +69,7 @@ export class Writer {
 	 * @param {Topic} tpc
 	 * @param {boolean} force If already written
 	 */
-	static structureWrite(tpc, force) {
+	static structureWrite(tpc, force = false) {
 		let t = StoreManager.topics[tpc.name];
 
 		if (test("-f", join(t.dir, t.files.structure)) && !force) return;
@@ -113,11 +104,11 @@ export class Writer {
 	 * @param {Topic} tpc
 	 * @param {string} strctr
 	 * @param {Note[]} toWrite
-	 * @returns {boolean} for success
+	 * @returns {Promise<boolean>} for success
 	 */
 	async append(server, pid, tpc, strctr, toWrite) {
 		let sm = await StoreManager.getInstance();
-		let keys = await Writer.keysRead(tpc.name, true);
+		let keys = await Reader.getKeys(tpc.name, true);
 
 		// Needed for append2file()
 		this.batch = ""; // raw data to write
@@ -133,7 +124,7 @@ export class Writer {
 
 		let data, nt;
 		for (let i = 0; this.success && i < toWrite.length; i++) {
-			let nt = toWrite[i]; // Note
+			nt = toWrite[i]; // Note
 
 			// Get new key
 			if (!keys[tpc.name][strctr]) keys[tpc.name][strctr] = 0; // In case of very first
@@ -146,7 +137,7 @@ export class Writer {
 			let isLast = i == toWrite.length - 1;
 			let needsNext =
 				sizes.current + this.size.written + this.size.toWrite + sizes.note >
-				Notes.options.current.maxSize;
+				Notes.options.maxSize.current;
 
 			this.size.toWrite += sizes.note;
 			this.batch += data;
@@ -162,7 +153,7 @@ export class Writer {
 			}
 		}
 
-		Queues.done(this.path, true);
+		Queues.done(this.path);
 		await Writer.keysWrite(tpc.name, keys);
 
 		return this.success;

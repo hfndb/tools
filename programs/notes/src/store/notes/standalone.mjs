@@ -1,22 +1,17 @@
 "use strict";
 import { AppConfig } from "../../../generic/config.mjs";
 
-AppConfig.getInstance("notes"); // Avoid errors during standalone tests
+let cfg = AppConfig.getInstance("notes");
 
-// To be replaced by lib/log.mjs during integration
-export let log = {
-	debug: function(...pars) {
-		console.log(...pars);
-	},
-	error: function(...pars) {
-		console.log(...pars);
-	},
-	info: function(...pars) {
-		console.log(...pars);
-	},
+cfg.options.formats = {
+	date: "DD-MM-YYYY",
+	datetime: "DD-MM-YYYY HH:mm",
+	time: "HH:mm",
+	decimalSeparator: ",",
+	thousandsSeparator: ".",
 };
 
-export let logOptions = {
+cfg.options.logging = {
 	exitOnError: true,
 	level: "debug",
 	playSoundOn: {
@@ -37,7 +32,20 @@ export let logOptions = {
 			active: false,
 		},
 	},
-}
+};
+
+// To be replaced by lib/log.mjs during integration
+export let log = {
+	debug: function(...pars) {
+		console.log(...pars);
+	},
+	error: function(...pars) {
+		console.log(...pars);
+	},
+	info: function(...pars) {
+		console.log(...pars);
+	},
+};
 
 export function setup(logger) {
 	log = logger;

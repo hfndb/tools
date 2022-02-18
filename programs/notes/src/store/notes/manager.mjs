@@ -1,6 +1,6 @@
 "use strict";
-import { join, sep } from "path";
-import { exec, test, touch, fdir, FileUtils, Notes } from "./index.mjs";
+import { join } from "path";
+import { test, touch, FileUtils, Notes, Topic } from "./index.mjs";
 import { Writer } from "./scribe/write.mjs";
 
 /** Manage files
@@ -19,14 +19,12 @@ export class StoreManager {
 
 	/**
 	 * @private
-	 * @var {Kitchen}
+	 * @var {StoreManager}
 	 */
 	static _instance;
 
 	/**
 	 * Singleton factory to get instance
-	 *
-	 * @returns {Kitchen}
 	 */
 	static async getInstance() {
 		if (!StoreManager._instance) {
@@ -101,21 +99,26 @@ export class StoreManager {
 		return file;
 	}
 
-	getSequenceNr(path, cycle) {
-		const fl = new fdir()
-			.crawlWithOptions(path, {
-				group: true,
-			})
-			.sync();
-		let files = fl[0].files;
+	/** Get current sequence number
+	 *
+	 * @param {string} path
+	 * @returns {number}
+	 */
+	getSequenceNr(path) {
+		FileUtils.mkdir(path);
 
-		let max = 1;
+		let files = FileUtils.getFileList(path, {
+			recursive: false,
+		});
+
+		let max = 0;
 		for (let i = 0; i < files.length; i++) {
 			let f = files[i].substring(0, 7);
 			if (f == "current") continue;
 			max = Math.max(max, parseInt(f));
 		}
-		if (cycle && max >= cycle) max = 1;
+
+		return max;
 	}
 
 	/** Get next filename for queue within process
@@ -132,8 +135,11 @@ export class StoreManager {
 		let path = this.getDir(crrnt.dir, strctr, server, pid);
 
 		FileUtils.mkdir(path);
-		let max = this.getSequenceNr(path, 9999999); // Cycle after 7 * '9'
-		if (next) max++;
+		let max = this.getSequenceNr(path); // Cycle after 7 * '9'
+		if (next) {
+			max++;
+			if (max > 9999999) max = 1; // Cycle
+		}
 
 		return join(
 			path,
@@ -149,7 +155,7 @@ export class StoreManager {
 	 * @param {Topic} tpc Topic
 	 * @param {string} strctr Name of structure
 	 * @param {string} server Name of server
-	 * @param {boolean} next False is current, true if Next sequence number
+	 * @param {boolean} [next] False is current, true if Next sequence number
 	 * @returns {string} Full absolute path
 	 */
 	getMerged4server(tpc, strctr, server, next) {
@@ -157,7 +163,7 @@ export class StoreManager {
 		let path = this.getDir(crrnt.dir, strctr, server);
 
 		let max = this.getSequenceNr(path); // No cycling
-		if (next) max++;
+		if (max == 0 || next) max++;
 
 		let file = join(
 			path,

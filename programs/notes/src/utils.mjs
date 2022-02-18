@@ -195,11 +195,7 @@ export class Formatter {
 		let minus = nr < 0 ? "-" : "";
 		let part = nr % 1;
 		let rem = nr - part;
-		if (decimals) {
-			// @ts-ignore
-			part = part.toPrecision(decimals);
-		}
-		part *= 100;
+		part = decimals ? part * 100 : 0;
 		let toReturn =
 			decimals == 0
 				? ""
@@ -212,11 +208,7 @@ export class Formatter {
 			part = rem % 1000;
 			rem = (rem - part) / 1000;
 			// @ts-ignore
-			part = part.toString();
-			if (rem) {
-				// @ts-ignore
-				part = part.padStart(3, "0");
-			}
+			part = part.toString().padStart(3, "0");
 			toReturn = this.thousandsSeparator + part + toReturn;
 		}
 		if (toReturn.startsWith(this.thousandsSeparator)) {

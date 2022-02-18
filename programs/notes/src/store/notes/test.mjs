@@ -1,32 +1,42 @@
 #! /usr/bin/env node
 "use strict";
+import { AppConfig } from "../../../generic/config.mjs";
 import { Logger } from "../../../generic/log.mjs";
+import { Formatter } from "../../utils.mjs";
 import { randomUUID } from "crypto";
 import { StringExt, Notes } from "./index.mjs";
 import { Note, Part, Structure, Topic } from "./index.mjs";
-import { logOptions } from "./standalone.mjs";
 import { Kitchen, Recipe } from "./howto/structure.mjs";
-import { Transformer } from "./transform/transformer.mjs";
+import { Merge } from "./scribe/merge.mjs";
 
-let log = Logger.getInstance(logOptions); // Avoid errors during standalone tests
+let cfg = AppConfig.getInstance("notes");
+let log = Logger.getInstance(cfg.options.logging);
 
 // -----------------------------------------------------------------------------------
 // Section: Test for adding notes
 // -----------------------------------------------------------------------------------
 
+let frmttr = new Formatter();
+
 let vars = {
 	debug: false, // debug info from Topic while adding note
-	interval: 50,
+	interval: 50, // Qty of notes before adding 1 day
 	lastDate: new Date(2000, 1, 1),
 	nr: 0,
-	runs: 1,
+	// Parts of this test
+	parts: {
+		add: true,
+		merge: true,
+		retain: true,
+	},
+	runs: 1, // Run test how many times?
 	show: {
 		lastNote: false,
 		notes: false,
 		structure: false,
 	},
 	start: performance.now(),
-	qtyTestItems: 10,
+	qtyTestItems: 10, // Qty of notes to add per run
 };
 
 // Function called from a loop
@@ -65,7 +75,7 @@ export async function test() {
 	recipe = new Recipe(); // Structure
 
 	// Loop to add notes
-	for (let i = 0; i < vars.qtyTestItems; i++) {
+	for (let i = 0; vars.parts.add && i < vars.qtyTestItems; i++) {
 		addNote();
 	}
 
@@ -73,7 +83,7 @@ export async function test() {
 
 	if (vars.show.structure) log.info("Structure:", kitchen.toStructure());
 
-	if (vars.show.notes) {
+	if (vars.parts.add && vars.show.notes) {
 		log.info("Note(s):");
 		for (let i = 0; i < kitchen.notes.length; i++) {
 			let item = kitchen.notes[i];
@@ -96,18 +106,28 @@ export async function test() {
 	}
 
 	// Statistics for adding notes
-	log.info(`Notes added but not written yet: ${vars.nr}`);
+	log.info(`Notes added: ${frmttr.int(vars.nr)}`);
 
 	let now = performance.now();
 	let timeElapsed = now - vars.start;
-	log.info(`Time needed to add: ${StringExt.microSeconds2string(timeElapsed)}`);
-
-	now = performance.now();
-	await kitchen.retain(Recipe);
-	timeElapsed = now - vars.start - timeElapsed;
 	log.info(
-		`Time needed to retain: ${StringExt.microSeconds2string(timeElapsed)}`,
+		`Time needed to add (memory): ${StringExt.microSeconds2string(timeElapsed)}`,
 	);
+
+	if (vars.parts.retain) {
+		now = performance.now();
+		await kitchen.retain(Recipe);
+		timeElapsed = now - vars.start - timeElapsed;
+		log.info(
+			`Time needed to retain (disk): ${StringExt.microSeconds2string(
+				timeElapsed,
+			)}`,
+		);
+	}
+
+	if (vars.parts.merge) {
+		await Merge.mergeServer(kitchen, Notes.vars.serverName);
+	}
 
 	// -----------------------------------------------------------------------------------
 	// Section: Generic statistics
