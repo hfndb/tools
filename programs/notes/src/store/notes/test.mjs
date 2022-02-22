@@ -8,8 +8,8 @@ import { StringExt, Notes } from "./index.mjs";
 import { Note, Part, Structure, Topic } from "./index.mjs";
 import { Kitchen, Recipe } from "./howto/structure.mjs";
 import { SampleInquiry } from "./howto/usage.mjs";
-import { Merge } from "./scribe/merge.mjs";
-import { Inquirer } from "./inquiry.mjs";
+import { Merger } from "./scribe/merge.mjs";
+import { Inquirer } from "./inquirer.mjs";
 
 let cfg = AppConfig.getInstance("notes");
 let log = Logger.getInstance(cfg.options.logging);
@@ -130,7 +130,7 @@ export async function test() {
 	}
 
 	if (vars.parts.merge) {
-		await Merge.mergeServer(kitchen, Notes.vars.serverName);
+		await Merger.mergeServer(kitchen, Notes.vars.serverName);
 	}
 
 	if (vars.parts.scan) {

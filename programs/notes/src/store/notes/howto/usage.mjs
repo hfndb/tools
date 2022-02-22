@@ -1,6 +1,6 @@
 "use strict";
 import { Kitchen, Recipe } from "./structure.mjs";
-import { Inquirer } from "../inquiry.mjs";
+import { Inquirer } from "../inquirer.mjs";
 
 /**
  * Howto's about usage, in function blocks

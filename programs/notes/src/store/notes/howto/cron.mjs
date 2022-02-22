@@ -1,12 +1,15 @@
 #! /usr/bin/env node
-"use strict";
 import { integrate } from "../integration.mjs";
-import { Merge } from "../scribe/merge.mjs";
+import { Merger } from "../scribe/merge.mjs";
 import { Kitchen } from "./structure.mjs";
 
 /**
  * Example of activity initiated using a cron job, to:
  * - Merge files generated in a process
+ *
+ * Triggering this file should be organized using cron or anacron.
+ * @see https://en.wikipedia.org/wiki/Cron
+ * @see https://en.wikipedia.org/wiki/Anacron
  */
 
 integrate(); // Proper initialization of variables
@@ -17,7 +20,7 @@ integrate(); // Proper initialization of variables
 
 // Get instance of Topic
 let kitchen = await Kitchen.getInstance();
-Merge.mergeServer(kitchen, "localhost");
+Merger.mergeServer(kitchen, "localhost");
 
 // -----------------------------------------------------
 // Section: Generate standardized reports

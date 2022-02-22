@@ -8,7 +8,7 @@ import { StoreManager } from "../manager.mjs";
  * For merging queued and current files in processes into 'merged'
  * for structure within a specified server like localhost
  */
-export class Merge {
+export class Merger {
 	tpc; // Topic to work with
 
 	vars = {

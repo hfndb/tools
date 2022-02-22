@@ -1,5 +1,5 @@
 "use strict";
-import { Note, Part, Structure, Topic } from "../index.mjs";
+import { Part, Structure, Topic } from "../index.mjs";
 
 // Howto setup a topic with structure
 
@@ -11,6 +11,11 @@ export class Recipe extends Structure {
 		super({
 			name: "recipe",
 			additional: [], // For example; ingredients of recipe
+			autoAdd: {
+				key: true, // Default behavior, autoincrement
+				added: false, // Idem dito, datetime when added
+				updated: false, // Idem dito, datetime when updated
+			},
 			parts: [
 				// Part 'key' is automatically added (auto increment)
 
@@ -63,7 +68,7 @@ export class Kitchen extends Topic {
 	/**
 	 * Singleton factory to get instance
 	 *
-	 * @returns {Kitchen}
+	 * @returns {Promise<Kitchen>}
 	 */
 	static async getInstance() {
 		if (!Kitchen._instance) {
