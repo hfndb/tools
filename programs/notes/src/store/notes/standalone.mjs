@@ -45,6 +45,9 @@ export let log = {
 	info: function(...pars) {
 		console.log(...pars);
 	},
+	warn: function(...pars) {
+		console.log(...pars);
+	},
 };
 
 export function setup(logger) {

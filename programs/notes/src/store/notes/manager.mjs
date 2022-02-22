@@ -1,5 +1,6 @@
 "use strict";
-import { join } from "path";
+import { join, sep } from "path";
+import { getDirList } from "../../file-system/dirs.mjs";
 import { test, touch, FileUtils, Notes, Topic } from "./index.mjs";
 import { Writer } from "./scribe/write.mjs";
 
@@ -101,6 +102,7 @@ export class StoreManager {
 
 	/** Get current sequence number
 	 *
+	 * @private
 	 * @param {string} path
 	 * @returns {number}
 	 */
@@ -176,5 +178,40 @@ export class StoreManager {
 		if (!test("-f", file)) touch(file);
 
 		return file;
+	}
+
+	/**
+	 * For Reader. Merged in all servers
+	 *
+	 * @param {Topic} tpc Topic
+	 * @param {string} strctr Name of structure
+	 * @param {number} what to read
+	 * @returns {string[]}
+	 */
+	get4reading(tpc, strctr, what) {
+		let crrnt = StoreManager.topics[tpc.name];
+		let path = this.getDir(crrnt.dir, strctr);
+		let file,
+			files,
+			pids,
+			dir = "",
+			rt = [];
+
+		let servers = getDirList(path, false);
+		for (let i = 0; i < servers.length; i++) {
+			files = FileUtils.getFileList(join(path, servers[i]), {
+				recursive: true,
+			});
+
+			for (let i = 0; files && i < files.length; i++) {
+				if (what == 1 && files[i].includes(sep)) continue; // Not at top level for merged
+				if (what > 1 && !files[i].includes(sep)) continue; // Not in pid but at top level
+				if (what == 2 && files[i].includes("current")) continue; // We want queue file, not current
+				if (what == 3 && !files[i].includes("current")) continue; // We want current file, not queue
+				rt.push(join(path, files[i]));
+			}
+		}
+
+		return rt;
 	}
 }

@@ -3,7 +3,9 @@
 /** Transform variants aka types to string vice versa
  */
 export default class TsvPlugin {
+	eon = "\n"; // End of note, while reading or writing
 	ext = ".tsv";
+	fileFormat = "txt"; // For Reader
 	name = "tsv";
 
 	/**
@@ -161,7 +163,7 @@ export default class TsvPlugin {
 			val = obj[part.name];
 			ta.push(this.variant2string(part.variant, val));
 		}
-		return ta.join("\t") + "\n";
+		return ta.join("\t") + this.eon;
 	}
 
 	/**

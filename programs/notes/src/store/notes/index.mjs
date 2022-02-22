@@ -1,5 +1,4 @@
 "use strict";
-import { fdir } from "fdir";
 import shelljs from "shelljs";
 import { FileUtils } from "../../file-system/files.mjs";
 import { ObjectUtils } from "../../object.mjs";
@@ -14,7 +13,6 @@ export {
 	mv,
 	test,
 	touch,
-	fdir,
 	FileUtils,
 	ObjectUtils,
 	StringExt,

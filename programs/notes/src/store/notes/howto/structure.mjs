@@ -1,19 +1,16 @@
 "use strict";
 import { Note, Part, Structure, Topic } from "../index.mjs";
 
+// Howto setup a topic with structure
+
 /**
- * Howto setup a topic with structure
+ * Structure. You could compare this with a table structure in a database
  */
-
-
 export class Recipe extends Structure {
 	constructor() {
 		super({
 			name: "recipe",
 			additional: [], // For example; ingredients of recipe
-			// @ts-ignore
-			// Choices for variant: INTERACTION, LOOKUP
-			variant: Structure.LOOKUP,
 			parts: [
 				// Part 'key' is automatically added (auto increment)
 
@@ -45,6 +42,9 @@ export class Recipe extends Structure {
 	}
 }
 
+/**
+ * Topic. You could compare this with a catalog or schema in a database
+ */
 export class Kitchen extends Topic {
 	/**
 	 * @private

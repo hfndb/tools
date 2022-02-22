@@ -7,7 +7,9 @@ import { randomUUID } from "crypto";
 import { StringExt, Notes } from "./index.mjs";
 import { Note, Part, Structure, Topic } from "./index.mjs";
 import { Kitchen, Recipe } from "./howto/structure.mjs";
+import { SampleInquiry } from "./howto/usage.mjs";
 import { Merge } from "./scribe/merge.mjs";
+import { Inquirer } from "./inquiry.mjs";
 
 let cfg = AppConfig.getInstance("notes");
 let log = Logger.getInstance(cfg.options.logging);
@@ -28,11 +30,13 @@ let vars = {
 		add: true,
 		merge: true,
 		retain: true,
+		scan: true,
 	},
 	runs: 1, // Run test how many times?
 	show: {
 		lastNote: false,
 		notes: false,
+		scanResults: true,
 		structure: false,
 	},
 	start: performance.now(),
@@ -46,7 +50,7 @@ function addNote() {
 		vars.lastDate.setDate(vars.lastDate.getDate() + 1); // rolls over
 	}
 
-	let result = kitchen.add(
+	let result = kitchen.composeNote(
 		{
 			stringExample: randomUUID(),
 			dateExample: vars.lastDate,
@@ -127,6 +131,17 @@ export async function test() {
 
 	if (vars.parts.merge) {
 		await Merge.mergeServer(kitchen, Notes.vars.serverName);
+	}
+
+	if (vars.parts.scan) {
+		// Let's scan recipes
+		let iqr = new SampleInquiry();
+
+		await kitchen.scan(Recipe, iqr);
+
+		if (vars.show.scanResults) {
+			log.info(iqr);
+		}
 	}
 
 	// -----------------------------------------------------------------------------------

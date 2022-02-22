@@ -101,9 +101,9 @@ export class Merge {
 			let cmd = `cat ${this.vars.queue} >> ${this.vars.merged}; rm -rf ${qd}`;
 			try {
 				let output = exec(cmd, { async: false, silent: false });
-				if (output) throw new Error(output);
+				if (output.code) throw new Error(output.stderr);
 			} catch (err) {
-				log.error(err);
+				log.warn(err);
 			}
 		}
 	}

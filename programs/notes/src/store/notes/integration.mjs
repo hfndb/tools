@@ -9,7 +9,7 @@ import { setup } from "./standalone.mjs";
  * logging and project settings.
  */
 export function integrate() {
-	let cfg = AppConfig.getInstance();
+	let cfg = AppConfig.getInstance("notes");
 	if (cfg.options.store.notes) {
 		Notes.options = cfg.options.store.notes;
 	}
