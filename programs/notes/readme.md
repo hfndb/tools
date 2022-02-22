@@ -50,9 +50,10 @@ If you would view Notes as a composed organization with employees, the following
 |                                                                                         |
 | Out of sight while using:                                                               |
 |                                                                                         |
+| Manager          | Manages file names for writing to disk, and reading                  |
 | Transformer      | Transforms a note for writing to disk, and back after reading        |
-| Scribe           | A 'department' consisting of 3 operatives, Reader, Writer en Merger: |
 |                                                                                         |
+| Scribe           | A 'department' consisting of 3 operatives; Reader, Writer en Merger: |
 | Reader           | Reads from the file system                                           |
 | Writer           | Writes to the file system                                            |
 | Merger           | Merges files generated in one or more file systems                   |
@@ -61,6 +62,8 @@ If you would view Notes as a composed organization with employees, the following
 From a philosophical point of view: Several operatives within one organization acting 'together as one'. From another perspective; an independent who acts alone can be seen as one whole, or as somebody with specific parts of thinking.
 
 From a psychological point of view: In a Culture of Users, some aiming to use others, a life is considered a 'usable' or 'ignorable' though both a 'disposable', whereby parts of that life which cannot be used from the outside will be ignored. Which of those two parts are truly valuable is a matter of perspective.
+
+Viewed like this, philosophy from the outside can interfere with truth within a psyche like a [jammer](https://en.wikipedia.org/wiki/Jammer), a signal blocking device. What's really true is not the primary question.
 
 
 ## Howto
