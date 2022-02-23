@@ -1,10 +1,12 @@
 # Notes
 
-**Preview description** of a project which is currently in the phase of active architecturing and developing. By me, since there can only be one for now. Now, while this project is still in progress, some first files were added, though not all yet.
-
 Notes is a lightweight [Node.js](https://en.wikipedia.org/wiki/Node.js) program (roughly 100 KB) to do something like making notes in order to retrieve those later. Not in a psyche, in memory, but in a computer. Simple, you might think.
 
 However, not using a known [file format](https://en.wikipedia.org/wiki/File_format) or even some [database](https://en.wikipedia.org/wiki/Database) seems a taboo in view of massive infections with the 'having it easy' virus. Within this taboo area, I have used another than customary approach for preserving notes. Which also resulted in other terms, another vocabulary.
+
+This is a **preview** of a project which is currently in the phase of active architecturing and developing. By me, since there can only be one for now.
+
+**Project status**: Adding notes, write them from memory to disk, read them from disk to memory is finished. Updating and deleting what's already on disk still needs to be added.
 
 ## Translations
 
@@ -70,9 +72,9 @@ Viewed like this, philosophy from the outside can interfere with truth within a 
 
 Instead of documenting in the usual way, some howto's have been added to this project as functional code examples. Which have also been used to run tests. Howto's can be found in the directory src/store/notes/howto:
 
-+ structure.mjs: Shows how to create a Topic with one or more Structures during proejct configuration.
-+ howto.mjs: Shows how to handle notes and use Inquirer after a Topic and Structures are created.
-+ cron.mjs: Shows how to initiate automated tasks (maintainance, reporting) using [cron](https://en.wikipedia.org/wiki/Cron).
++ [structure.mjs](./src/store/notes/howto/structure.mjs): Shows how to create a Topic with one or more Structures during proejct configuration.
++ [usage.mjs](./src/store/notes/howto/usage.mjs): Shows how to handle notes and use Inquirer after a Topic and Structures are created.
++ [cron.mjs](./src/store/notes/howto/cron.mjs): Shows how to initiate automated tasks (maintainance, reporting) using [cron](https://en.wikipedia.org/wiki/Cron).
 
 
 ## Read more
