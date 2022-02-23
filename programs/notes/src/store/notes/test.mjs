@@ -1,18 +1,18 @@
 #! /usr/bin/env node
-"use strict";
-import { AppConfig } from "../../../generic/config.mjs";
 import { Logger } from "../../../generic/log.mjs";
 import { Formatter } from "../../utils.mjs";
 import { randomUUID } from "crypto";
-import { StringExt, Notes } from "./index.mjs";
-import { Note, Part, Structure, Topic } from "./index.mjs";
+import { StringExt, Note, Notes } from "./index.mjs";
 import { Kitchen, Recipe } from "./howto/structure.mjs";
 import { SampleInquiry } from "./howto/usage.mjs";
+import { integrate } from "./integration.mjs";
 import { Merger } from "./scribe/merge.mjs";
-import { Inquirer } from "./inquirer.mjs";
 
-let cfg = AppConfig.getInstance("notes");
-let log = Logger.getInstance(cfg.options.logging);
+// Setup standalone version of integration with
+// files from cookware-headless-ice
+integrate(true);
+
+let log = Logger.getInstance();
 
 // -----------------------------------------------------------------------------------
 // Section: Test for adding notes
@@ -36,11 +36,11 @@ let vars = {
 	show: {
 		lastNote: false,
 		notes: false,
-		scanResults: true,
+		scanResults: false,
 		structure: false,
 	},
-	start: performance.now(),
-	qtyTestItems: 10, // Qty of notes to add per run
+	start: Date.now(),
+	qtyTestItems: 100000, // Qty of notes to add per run
 };
 
 // Function called from a loop
@@ -51,13 +51,13 @@ function addNote() {
 	}
 
 	let result = kitchen.composeNote(
+		Recipe,
 		{
 			stringExample: randomUUID(),
 			dateExample: vars.lastDate,
 			intExample: Math.floor(Math.random() * 1000),
 			floatExample: Math.random() * 1000,
 		},
-		recipe,
 		vars.debug,
 	);
 	if (result.key < -1) return false;
@@ -79,6 +79,8 @@ export async function test() {
 	recipe = new Recipe(); // Structure
 
 	// Loop to add notes
+	let now = Date.now();
+	let timeElapsed = now - vars.start;
 	for (let i = 0; vars.parts.add && i < vars.qtyTestItems; i++) {
 		addNote();
 	}
@@ -111,20 +113,21 @@ export async function test() {
 
 	// Statistics for adding notes
 	log.info(`Notes added: ${frmttr.int(vars.nr)}`);
-
-	let now = performance.now();
-	let timeElapsed = now - vars.start;
 	log.info(
-		`Time needed to add (memory): ${StringExt.microSeconds2string(timeElapsed)}`,
+		`Time needed to add (memory): ${StringExt.microSeconds2string(
+			timeElapsed,
+			false,
+		)}`,
 	);
 
 	if (vars.parts.retain) {
-		now = performance.now();
+		now = Date.now();
 		await kitchen.retain(Recipe);
 		timeElapsed = now - vars.start - timeElapsed;
 		log.info(
 			`Time needed to retain (disk): ${StringExt.microSeconds2string(
 				timeElapsed,
+				false,
 			)}`,
 		);
 	}
@@ -137,10 +140,18 @@ export async function test() {
 		// Let's scan recipes
 		let iqr = new SampleInquiry();
 
+		now = Date.now();
 		await kitchen.scan(Recipe, iqr);
+		timeElapsed = now - vars.start - timeElapsed;
+		log.info(
+			`Time needed to scan (disk): ${StringExt.microSeconds2string(
+				timeElapsed,
+				false,
+			)}`,
+		);
 
 		if (vars.show.scanResults) {
-			log.info(iqr);
+			log.info(iqr.toObject());
 		}
 	}
 

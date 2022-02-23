@@ -87,7 +87,7 @@ export class SampleInquiry extends Inquirer {
 		// You could add calculated properties or do whatever else here
 
 		// Add note to result set of inquiry
-		if (obj.description.includes("test")) {
+		if (obj.stringExample.includes("test")) {
 			this.results.push(obj);
 		}
 

@@ -34,7 +34,7 @@ export class Merger {
 	static async mergeServer(tpc, server) {
 		StoreManager.topics[tpc.name].dir;
 		let sm = await StoreManager.getInstance();
-		let mrg = new Merge(tpc);
+		let mrg = new Merger(tpc);
 
 		for (let i = 0; i < tpc.structures.length; i++) {
 			// @ts-ignore

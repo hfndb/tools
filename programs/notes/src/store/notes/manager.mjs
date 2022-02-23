@@ -1,7 +1,7 @@
 "use strict";
 import { join, sep } from "path";
 import { getDirList } from "../../file-system/dirs.mjs";
-import { test, touch, FileUtils, Notes, Topic } from "./index.mjs";
+import { test, touch, FileUtils, StringExt, Notes, Topic } from "./index.mjs";
 import { Writer } from "./scribe/write.mjs";
 
 /** Manage files
@@ -11,9 +11,12 @@ import { Writer } from "./scribe/write.mjs";
  *     Structure of topic
  * - [topic name]/keys.json
  *     Last used keys for all structures in topic
- * - [topic name]/[structure name]/[server name]/merged.[ext]
+ * - [topic name]/[structure name]/[server name]/[sequence number].[ext]
+ *     Merged files, from queue
  * - [topic name]/[structure name]/[server name]/[pid]/current.[ext]
+ *     Current file to write to, for pid
  * - [topic name]/[structure name]/[server name]/[pid]/[sequence number].[ext]
+ *     Queue file for pid. Was current, will now be merged into merged into a higher level
  */
 export class StoreManager {
 	static topics = {};
@@ -193,6 +196,7 @@ export class StoreManager {
 		let path = this.getDir(crrnt.dir, strctr);
 		let file,
 			files,
+			level,
 			pids,
 			dir = "",
 			rt = [];
@@ -204,11 +208,13 @@ export class StoreManager {
 			});
 
 			for (let i = 0; files && i < files.length; i++) {
-				if (what == 1 && files[i].includes(sep)) continue; // Not at top level for merged
-				if (what > 1 && !files[i].includes(sep)) continue; // Not in pid but at top level
-				if (what == 2 && files[i].includes("current")) continue; // We want queue file, not current
-				if (what == 3 && !files[i].includes("current")) continue; // We want current file, not queue
-				rt.push(join(path, files[i]));
+				file = files[i].substring(path.length + 1);
+				level = StringExt.occurrences(file, sep);
+				if (what == 1 && level > 1) continue; // Not at top level for merged
+				if (what > 1 && level != 2) continue; // Not in pid but at top level
+				if (what == 2 && file.includes("current")) continue; // We want queue file, not current
+				if (what == 3 && !file.includes("current")) continue; // We want current file, not queue
+				rt.push(join(path, file));
 			}
 		}
 

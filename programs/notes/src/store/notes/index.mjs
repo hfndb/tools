@@ -5,7 +5,7 @@ import { ObjectUtils } from "../../object.mjs";
 import { StringExt } from "../../utils.mjs";
 import { Notes } from "./notes.mjs";
 import { Note, Part, Structure, Topic } from "./meta.mjs";
-import { log } from "./standalone.mjs";
+import { log } from "./integration.mjs";
 const { exec, mv, test, touch } = shelljs;
 
 export {
@@ -17,8 +17,8 @@ export {
 	ObjectUtils,
 	StringExt,
 	log,
-	Notes,
 	Note,
+	Notes,
 	Part,
 	Structure,
 	Topic,

@@ -2,6 +2,7 @@
 import { Buffer } from "buffer";
 import { appendFileSync } from "fs";
 import { join } from "path";
+import { Lock } from "../../../file-system/lock.mjs";
 import { Queues } from "../../../queue.mjs";
 import {
 	mv,
@@ -62,7 +63,10 @@ export class Writer {
 			StoreManager.topics[tpc].dir,
 			StoreManager.topics[tpc].files.keys,
 		);
-		Queues.done(path);
+		Queues.done(path); // For async
+
+		let lck = new Lock(path);
+		lck.unlock(); // For other pid's
 	}
 
 	/**
@@ -154,7 +158,7 @@ export class Writer {
 		}
 
 		Queues.done(this.path);
-		await Writer.keysWrite(tpc.name, keys);
+		await Writer.keysWrite(tpc.name, keys, true);
 
 		return this.success;
 	}

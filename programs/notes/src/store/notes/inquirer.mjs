@@ -1,5 +1,5 @@
 "use strict";
-import { log } from "./index.mjs";
+import { log, ObjectUtils } from "./index.mjs";
 
 /**
  * For scanning purposes
@@ -145,5 +145,19 @@ export class Inquirer {
 	 */
 	stop() {
 		this.isStopped = true;
+	}
+
+	/**
+	 * Return a presentable object
+	 */
+	toObject() {
+		// Remove constants and return object
+		let obj = ObjectUtils.clone(this);
+		Reflect.deleteProperty(obj, "CNT");
+		Reflect.deleteProperty(obj, "AVG");
+		Reflect.deleteProperty(obj, "MIN");
+		Reflect.deleteProperty(obj, "MAX");
+		Reflect.deleteProperty(obj, "SUM");
+		return obj;
 	}
 }
