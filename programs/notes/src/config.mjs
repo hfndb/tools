@@ -333,10 +333,11 @@ export class AppMenu {
 		for (let i = 0; i < this.options.length; i++) {
 			let opt = this.options[i];
 			let sc = opt.alias ? `-${opt.alias} ` : "";
-			if (opt.type == Boolean) {
+			if (opt.hidden) {
+				program.addOption(new Option(`${sc}--${opt.name}`).hideHelp());
+			} else if (opt.type == Boolean) {
 				program.option(`${sc}--${opt.name}`, opt.description);
-			}
-			if (opt.type == String) {
+			} else if (opt.type == String) {
 				let lbl = opt.typeLabel ? ` ${opt.typeLabel}` : "";
 				program.option(`${sc}--${opt.name}${lbl}`, opt.description);
 			}

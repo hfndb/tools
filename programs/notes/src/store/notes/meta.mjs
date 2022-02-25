@@ -1,7 +1,7 @@
 "use strict";
 import { log, Notes, ObjectUtils, StringExt } from "./index.mjs";
 import { Reader } from "./scribe/read.mjs";
-import { Writer } from "./scribe/writer.mjs";
+import { Writer } from "./scribe/write.mjs";
 import { Inquirer } from "./inquirer.mjs";
 import { Transformer } from "./transform/transformer.mjs";
 
