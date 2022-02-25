@@ -6,7 +6,7 @@ import { dirname, join, normalize, sep } from "path";
 import { fileURLToPath } from "url";
 import deepdiff from "deep-diff";
 import shelljs from "shelljs";
-import { Command } from "commander";
+import { Command, Option } from "commander";
 import { DefaultConfig } from "../default-settings.mjs";
 import { Logger } from "./log.mjs";
 import { createDirTree } from "./file-system/dirs.mjs";
@@ -333,8 +333,12 @@ export class AppMenu {
 		for (let i = 0; i < this.options.length; i++) {
 			let opt = this.options[i];
 			let sc = opt.alias ? `-${opt.alias} ` : "";
+			let pts = {
+				hidden: opt.hidden,
+			};
 			if (opt.hidden) {
-				program.addOption(new Option(`${sc}--${opt.name}`).hideHelp());
+				// @todo addOption as in docs not in package 'commander'
+				program.option(`${sc}--${opt.name}`, "");
 			} else if (opt.type == Boolean) {
 				program.option(`${sc}--${opt.name}`, opt.description);
 			} else if (opt.type == String) {
