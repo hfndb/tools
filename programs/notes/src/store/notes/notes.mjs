@@ -4,7 +4,6 @@ import { performance } from "perf_hooks";
 import { Formatter } from "../../utils.mjs";
 import { StringExt, Note, Topic } from "./index.mjs";
 import { StoreManager } from "./manager.mjs";
-import { Writer } from "./scribe/write.mjs";
 
 /** Handle storage of notes (records, rows) in files
  */
@@ -114,35 +113,5 @@ Writes:
 	static async init(tpc) {
 		let sm = await StoreManager.getInstance();
 		sm.add(tpc);
-	}
-
-	/** Send for writing to disk
-	 *
-	 * @param {string} tpc Topic name
-	 * @param {string} strctr Structure name
-	 * @param {Note[]} data To append to file(s)
-	 * @returns {boolean} for success
-	 */
-	static async retain(tpc, strctr, data) {
-		let wrtr = new Writer();
-		await wrtr.append(
-			Notes.vars.serverName,
-			process.pid.toString(),
-			tpc,
-			strctr,
-			data,
-		);
-	}
-
-	/** Replace note
-	 *
-	 * @param {Topic} tp
-	 * @param {number} idxStructure Index of structure
-	 * @param {*} data To replace
-	 * @param {number} key
-	 * @returns {boolean} for success
-	 */
-	static async replaceNote(tp, idxStructure, data, key) {
-		// TODO replaceNote
 	}
 }

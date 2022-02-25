@@ -1,6 +1,7 @@
 "use strict";
 import { log, Notes, ObjectUtils, StringExt } from "./index.mjs";
 import { Reader } from "./scribe/read.mjs";
+import { Writer } from "./scribe/writer.mjs";
 import { Inquirer } from "./inquirer.mjs";
 import { Transformer } from "./transform/transformer.mjs";
 
@@ -349,20 +350,41 @@ export class Topic {
 		return nt;
 	}
 
+	/** Replace note
+	 *
+	 * @param {Structure} strctr
+	 * @param {*} data To replace
+	 * @param {number} key
+	 * @returns {boolean} for success
+	 */
+	async replaceNote(strctr, data, key) {
+		// TODO replaceNote
+	}
+
 	/**
 	 * Retain is another word for 'save' or 'update' to disk
-	 * @param {Structure} strctr
 	 *
+	 * @param {Structure} strctr
 	 */
 	async retain(strctr) {
 		let s = new strctr(),
 			tw = [];
+		let wrtr = new Writer();
 
 		for (let i = 0; i < this.notes[s.name].length; i++) {
 			tw.push(this.notes[s.name][i]); // Pass object reference, to get new key back
 		}
+		// Get rid of references not needed any more.
+		// Caller might have kept them, since they were passed by reference.
+		this.notes[s.name] = []; // Could also be done using .splice()
 
-		await Notes.retain(this, s.name, tw);
+		await wrtr.append(
+			Notes.vars.serverName,
+			process.pid.toString(),
+			tpc,
+			strctr,
+			data,
+		);
 	}
 
 	/** Scan a structure for notes
