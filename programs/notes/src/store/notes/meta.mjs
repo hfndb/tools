@@ -3,6 +3,7 @@ import { log, Notes, ObjectUtils, StringExt } from "./index.mjs";
 import { Reader } from "./scribe/read.mjs";
 import { Writer } from "./scribe/write.mjs";
 import { Inquirer } from "./inquirer.mjs";
+import { StoreManager } from "./manager.mjs";
 import { Transformer } from "./transform/transformer.mjs";
 
 /** @typedef PartOptions
@@ -306,7 +307,9 @@ export class Topic {
 	static async init(obj) {
 		if (obj.transformer) return;
 		obj.transformer = this.transformer = await Transformer.get(obj.format);
-		await Notes.init(obj);
+
+		let sm = await StoreManager.getInstance();
+		sm.add(obj);
 	}
 
 	/** To write to file system

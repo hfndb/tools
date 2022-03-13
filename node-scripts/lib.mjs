@@ -1,9 +1,13 @@
 #! /usr/bin/env node
-import { existsSync } from "fs";
+import { statSync } from "fs";
+import { promisify } from "util";
 import { homedir, platform, tmpdir } from "os";
 import { basename, dirname, join, normalize } from "path";
 import { fileURLToPath } from "url";
-import { exec } from "child_process"
+import { exec as execOrg } from "child_process"
+const exec = promisify(execOrg);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 //import { $, argv, cd, chalk, fs, question } from "zx";
 
 /**
@@ -21,9 +25,7 @@ if (!process.env.NODE_PATH) {
 	process.exit(1);
 }
 let zx = await import(join(process.env.NODE_PATH, "zx/dist/index.cjs"));
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+// ----------------------------------------------------------------------
 
 let vars = {
 	root: normalize(join(__dirname, "..")),
@@ -36,7 +38,7 @@ vars.nodeScripts = join(vars.root, "node-scripts");
 
 // ----------------------------------------------------------------------
 
-export {basename, dirname, join, homedir, vars};
+export {basename, dirname, join, homedir, statSync, vars};
 
 export class Files {
 
@@ -45,7 +47,7 @@ export class Files {
 	}
 
 	static pathExists(file, exit = true) {
-		let exists = existsSync(file);
+		let exists = zx.fs.existsSync(file);
 		if (!exists) {
 			console.error(zx.chalk.red(`File ${file} doesn't exist`));
 			if (exit) process.exit(1);
@@ -61,9 +63,13 @@ export class Files {
 		return await zx.fs.readJSON(path);
 	}
 
-	static async writeFile(path, data, verbose = true) {
+	static async writeJSON(path, data) {
+		await zx.fs.outputJson(path, data);
+	}
+
+	static async writeFile(path, data, opts = undefined, verbose = true) {
 		try {
-			await zx.fs.outputFile(path, data);
+			await zx.fs.outputFile(path, data, opts);
 			if (verbose) {
 				console.log(`${path} written`);
 			}
@@ -83,38 +89,25 @@ export class Misc {
 		return zx.chalk;
 	}
 
-	static async execNative(cmd, dry = false) {
-		return new Promise((resolve, reject) => {
-			exec(cmd, (error, stdout, stderr) => {
-				if (error) {
-					console.log(`Error: ${error.message}`);
-					reject(false);
-					return;
-				}
-				if (stderr) {
-					console.log(`Message:\n${stderr}`);
-					return;
-				}
-				console.log(stdout);
-				resolve(true);
-			});
-		})
-	}
-
 	static async enter2continue() {
 		await Misc.ask("\n     Press [enter] to continue...\n");
 		await Misc.exec("clear");
 	}
 
-	static async exec(cmd, dry = false) {
+	static async exec(cmd, dry = false, returnOutput = false) {
 		if (dry) {
 			console.log(cmd)
 			return;
 		}
-		await Misc.execNative(cmd, dry = false);
-		return;
 
-		// Zx exec() not usable
+		const { stdout, stderr } = await exec(cmd);
+		if (!returnOutput) console.log(stdout);
+		if (stderr) {
+			console.log(`Message:\n${stderr}`);
+		}
+
+		return returnOutput ? stdout : ""; // Zx exec() not usable
+
 		try {
 			await zx.$`${cmd}`.pipe(process.stdout);
 		} catch (p) {

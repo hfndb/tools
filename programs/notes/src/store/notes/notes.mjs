@@ -3,7 +3,6 @@ import { Buffer } from "buffer";
 import { performance } from "perf_hooks";
 import { Formatter } from "../../utils.mjs";
 import { StringExt, Note, Topic } from "./index.mjs";
-import { StoreManager } from "./manager.mjs";
 
 /** Handle storage of notes (records, rows) in files
  */
@@ -104,14 +103,5 @@ Writes:
 			Notes.vars.writes.fastest = Math.min(Notes.vars.writes.fastest, duration);
 			Notes.vars.writes.slowest = Math.max(Notes.vars.writes.slowest, duration);
 		}
-	}
-
-	/** Initialize
-	 *
-	 * @param {Object} tpc Topic structure
-	 */
-	static async init(tpc) {
-		let sm = await StoreManager.getInstance();
-		sm.add(tpc);
 	}
 }

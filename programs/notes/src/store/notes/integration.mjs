@@ -13,7 +13,7 @@ let log;
  * @param {boolean} standalone For cron jobs, tests and alike
  */
 export function integrate(standalone = false) {
-	let cfg = AppConfig.getInstance("notes");
+	let cfg = AppConfig.getInstance();
 	if (cfg.options.store.notes) {
 		Notes.options = cfg.options.store.notes;
 	}

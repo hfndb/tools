@@ -12,7 +12,14 @@ let dirTemp = join(vars.tmpDir, "repositories");
 let sshLogin = `${data.user}@${data.server}`;
 let dry = false;
 
+/**
+ * Manage git repositoties
+ */
 class GitRemote {
+	static async prepLocalTemp() {
+		await Misc.exec(`rm -rf ${dirTemp}; mkdir ${dirTemp}`, dry);
+	}
+
 	/**
 	 * Loop all repositories and execute passed function
 	 */
@@ -46,10 +53,6 @@ class GitRemote {
 			console.log(`Pulling ${item[1]}`);
 			await Misc.exec(`cd ${path}; git pull`, dry);
 		}
-	}
-
-	static async prepLocalTemp() {
-		await Misc.exec(`rm -rf ${dirTemp}; mkdir ${dirTemp}`, dry);
 	}
 
 	/**
@@ -138,7 +141,7 @@ function packRepository {
 		let output = join(dirTemp, "pack.sh");
 
 		await Files.mkDir(dirTemp);
-		await Files.writeFile(output, bashScipt, false);
+		await Files.writeFile(output, bashScipt, undefined, false);
 
 		// Remotely execute generated bash script
 		await Misc.exec(`ssh ${sshLogin} 'bash -s' < ${output}`, dry);

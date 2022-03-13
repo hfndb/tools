@@ -1,9 +1,8 @@
 "use strict";
 import { AppConfig } from "../../../generic/config.mjs";
 
-let cfg = AppConfig.getInstance("notes");
-
 export function initConfig() {
+	let cfg = AppConfig.getInstance("notes");
 	cfg.options.formats = {
 		date: "DD-MM-YYYY",
 		datetime: "DD-MM-YYYY HH:mm",
@@ -52,5 +51,6 @@ let log = {
 };
 
 export function setupLogger(logger) {
+	let cfg = AppConfig.getInstance();
 	log = logger;
 }
