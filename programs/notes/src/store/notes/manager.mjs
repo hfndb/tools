@@ -201,6 +201,8 @@ export class StoreManager {
 			dir = "",
 			rt = [];
 
+		if (!test("-d", path)) return rt; // In case of no note files for structure at all
+
 		let servers = getDirList(path, false);
 		for (let i = 0; i < servers.length; i++) {
 			files = FileUtils.getFileList(join(path, servers[i]), {

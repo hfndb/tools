@@ -180,6 +180,7 @@ export class Structure {
 
 /** One note
  *
+ * @property {boolean|undefined} __ignore
  * @property {Structure} __structure
  */
 export class Note {
@@ -190,6 +191,7 @@ export class Note {
 	 * @param {Structure} strctr
 	 */
 	constructor(strctr, obj) {
+		// Class definition passed? Then transform to instance
 		if (typeof strctr == "function") strctr = new strctr();
 
 		this.__structure = strctr;
@@ -242,6 +244,22 @@ export class Note {
 		}
 
 		return tr;
+	}
+
+	/**
+	 * During scanning in Inquirer, method processNote():
+	 * Mark note as 'to ignore'
+	 */
+	ignore() {
+		this.__ignore = true;
+	}
+
+	/**
+	 * During scanning: Get mark note; 'to ignore'
+	 * For internal usage by Reader
+	 */
+	toIgnore() {
+		return this.__ignore ? true : false;
 	}
 
 	/** Parse a retrieved note and return an object
@@ -308,6 +326,13 @@ export class Topic {
 		if (obj.transformer) return;
 		obj.transformer = this.transformer = await Transformer.get(obj.format);
 
+		// Class definitions passed? Then transform to instances
+		// Needed for store manager
+		for (let i = 0; i < obj.structures.length; i++) {
+			if (typeof obj.structures[i] != "object")
+				obj.structures[i] = new obj.structures[i]();
+		}
+
 		let sm = await StoreManager.getInstance();
 		sm.add(obj);
 	}
@@ -370,7 +395,7 @@ export class Topic {
 	 * @param {Structure} strctr
 	 */
 	async retain(strctr) {
-		let s = new strctr(),
+		let s = typeof strctr == "object" ? strctr : new strctr(),
 			tw = [];
 		let wrtr = new Writer();
 
@@ -384,9 +409,9 @@ export class Topic {
 		await wrtr.append(
 			Notes.vars.serverName,
 			process.pid.toString(),
-			tpc,
-			strctr,
-			data,
+			this,
+			s.name,
+			tw,
 		);
 	}
 

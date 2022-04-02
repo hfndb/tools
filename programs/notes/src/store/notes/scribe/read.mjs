@@ -152,8 +152,10 @@ export class Reader {
 
 			let note = this.tpc.composeNote(this.strctr, obj);
 
-			this.iqr.aggregateAutoSet(note);
 			this.iqr.processNote(note);
+			if (!this.toIgnore()) {
+				this.iqr.aggregateAutoSet(note);
+			}
 
 			// Recurse, since chunk might contain other than this note
 			this.processIncoming();

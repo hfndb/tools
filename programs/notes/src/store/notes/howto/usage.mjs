@@ -42,13 +42,9 @@ export class Howto {
 	 * You could compare this with an SQL SELECT
 	 */
 	async scan() {
-		// Get instance of Topic
-		let kitchen = await Kitchen.getInstance();
-
-		// Object to pass by reference, extended instance of Inquirer
-		let iqr = new SampleInquiry(); // See below
-
-		await kitchen.scan(Recipe, iqr);
+		// Extended instance of Inquirer, see below
+		let iqr = new SampleInquiry();
+		await iqr.doSo();
 
 		/**
 		 * Instance of SampleInquiry now has some aggregated values in
@@ -79,6 +75,14 @@ export class SampleInquiry extends Inquirer {
 	}
 
 	/**
+	 * Go and inquire. Scan notes.
+	 */
+	async doSo() {
+		let kitchen = await Kitchen.getInstance();
+		await kitchen.scan(Recipe, this);
+	}
+
+	/**
 	 * Overwritten method, called by Reader for each Note
 	 *
 	 * @param {Note} obj
@@ -91,6 +95,14 @@ export class SampleInquiry extends Inquirer {
 			this.results.push(obj);
 		}
 
-		this.stop(); // If you want to stop scanning
+		if (false) {
+			// Mark note as to ignore for aggregate counting
+			this.ignore();
+		}
+
+		if (false) {
+			// If you want to stop scanning
+			this.stop();
+		}
 	}
 }

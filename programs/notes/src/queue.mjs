@@ -63,7 +63,7 @@ export class Queues {
 
 		// Get next shift in this queue, remove from array
 		let shift = Queues.queue[key].q.shift();
-		// array: idx 0 = pending promise, 1 = function to resolve that promise
+		// array: idx 0 = waiting promise, 1 = function to fullfil, resolve that promise
 
 		// Signal that time slot has been obtained
 		shift[1](true);
