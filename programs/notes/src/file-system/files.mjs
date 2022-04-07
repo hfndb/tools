@@ -34,16 +34,17 @@ export class FileUtils {
 
 	/**
 	 * Method to safely read a json file by importing
-	 * Introduced in Node.js v17.5.0
+	 * Introduced in Node.js v17.5.0, so far experimental.
 	 *
 	 * @param path {string} to json file to read
 	 * @returns {*} object with read json content or null
 	 */
 	static async importJsonFile(path, ignoreErrors = true) {
 		try {
-			return await import(path, {
+			let rt = await import(path, {
 				assert: { type: "json" },
 			});
+			return rt.default;
 		} catch (err) {
 			if (ignoreErrors) return null;
 			else {
@@ -206,25 +207,25 @@ The structure of this file is invalid, meaning, messed up.
 			},
 			file: {
 				ext: "",
-				full: "",
+				full: file,
 				size: 0,
 				stem: "",
 			},
 			full: "",
 		};
 
-		if (file.includes(sep)) {
+		if (rt.file.full.includes(sep)) {
 			rt.path.next = dirname(file);
-			file = basename(file);
+			rt.file.full = basename(file);
 		}
 
-		if (file.includes(".")) {
-			rt.file.ext = extname(file);
-			rt.file.stem = basename(file, rt.file.ext);
+		if (rt.file.full.includes(".")) {
+			rt.file.ext = extname(rt.file.full);
+			rt.file.stem = basename(rt.file.full, rt.file.ext);
 		} else {
-			rt.file.stem = file;
+			rt.file.stem = basename(file);
 		}
-		rt.file.full = rt.file.stem + rt.file.ext;
+
 		rt.path.full = join(rt.path.base, rt.path.next);
 		rt.full = join(rt.path.full, rt.file.full);
 

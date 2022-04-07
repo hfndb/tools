@@ -153,7 +153,7 @@ export class Reader {
 			let note = this.tpc.composeNote(this.strctr, obj);
 
 			this.iqr.processNote(note);
-			if (!this.toIgnore()) {
+			if (!note.toIgnore()) {
 				this.iqr.aggregateAutoSet(note);
 			}
 

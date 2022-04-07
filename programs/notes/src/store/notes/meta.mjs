@@ -421,7 +421,7 @@ export class Topic {
 	 * @param {Inquirer} iqr To gather information
 	 */
 	async scan(strctr, iqr) {
-		let s = new strctr();
+		let s = typeof strctr == "object" ? strctr : new strctr();
 		let rdr = new Reader();
 		await rdr.scan(this, s, iqr);
 	}

@@ -1,7 +1,7 @@
 "use strict";
 import { join } from "path";
 import { getDirList } from "../../../file-system/dirs.mjs";
-import { exec, FileUtils, log, Notes, Topic } from "../index.mjs";
+import { exec, test, FileUtils, log, Notes, Topic } from "../index.mjs";
 import { StoreManager } from "../manager.mjs";
 
 /**
@@ -38,7 +38,10 @@ export class Merger {
 
 		for (let i = 0; i < tpc.structures.length; i++) {
 			// @ts-ignore
-			let strctr = new tpc.structures[i]();
+			let strctr = tpc.structures[i];
+			if (typeof strctr != "object") {
+				strctr = new strctr();
+			}
 			mrg.vars.merged = sm.getMerged4server(tpc, strctr.name, server);
 			mrg.vars.sizeMerged = FileUtils.getFileSize(mrg.vars.merged);
 			mrg.vars.rootPath = join(
@@ -61,6 +64,7 @@ export class Merger {
 	 * @private
 	 */
 	async processStructure() {
+		if (!test("-d", this.vars.rootPath)) return; // No files yet
 		let dirs = getDirList(this.vars.rootPath, false); // List of pid's
 
 		for (let i = 0; i < dirs.length; i++) {
