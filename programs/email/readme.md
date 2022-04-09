@@ -19,12 +19,9 @@ Some ingredients: I like to write in pure HTML and to view the result in a web b
 In ~/.basrc I have added aliasses:
 
 ```bash
-# mi to initialize writing
+# mi to initialize or resume writing
 alias mi=/absolute/path/to/tools/programs/email/init-writing.sh
 # Resulting temp file is bookmarked in web browser
-
-# mr to resume writing
-alias mi=/absolute/path/to/tools/programs/email/resume-writing.sh
 
 # mp to prepare email for sending
 alias mp=/absolute/path/to/tools/programs/email/prepare.sh
