@@ -1,5 +1,5 @@
 "use strict";
-import { log, Notes, ObjectUtils, StringExt } from "./index.mjs";
+import { log, ObjectUtils, Notes } from "./index.mjs";
 import { Reader } from "./scribe/read.mjs";
 import { Writer } from "./scribe/write.mjs";
 import { Inquirer } from "./inquirer.mjs";
@@ -10,6 +10,7 @@ import { Transformer } from "./transform/transformer.mjs";
  * @property {*} [defaultValue]
  * @property {string|Structure} [foreignKey]
  * @property {string} name
+ * @property {string} [description]
  * @property {boolean} [required]
  * @property {string} [variant]
  */
@@ -19,11 +20,13 @@ import { Transformer } from "./transform/transformer.mjs";
  * @property {*} defaultValue
  * @property {string|Structure} foreignKey
  * @property {string} name
+ * @property {string} [description]
  * @property {boolean} required
  * @property {string} variant
  */
 export class Part {
 	defaultValue;
+	description;
 	foreignKey;
 	name;
 	required;
@@ -33,6 +36,7 @@ export class Part {
 	 * @param {PartOptions} opts
 	 */
 	constructor(opts) {
+		this.description = opts.description || opts.name;
 		this.variant = opts.variant || "string";
 		this.required = opts.required || false;
 
@@ -262,6 +266,15 @@ export class Note {
 		return this.__ignore ? true : false;
 	}
 
+	/**
+	 * For serializing
+	 */
+	toString() {
+		let tmp = ObjectUtils.clone(this);
+		Reflect.deleteProperty(tmp, "__structure");
+		return tmp;
+	}
+
 	/** Parse a retrieved note and return an object
 	 *
 	 * @param {Topic} tpc
@@ -362,8 +375,8 @@ export class Topic {
 
 	/** Compose an instance of Note based on the passed structure and object
 	 *
-	 * @param {Structure} strctr
-	 * @param {Object} obj
+	 * @param {*} strctr Structure definition or instance
+	 * @param {Object} opts
 	 * @param {boolean} [debug]
 	 * @returns {Note}
 	 */
@@ -392,7 +405,7 @@ export class Topic {
 	/**
 	 * Retain is another word for 'save' or 'update' to disk
 	 *
-	 * @param {Structure} strctr
+	 * @param {*} strctr Structure definition or instance
 	 */
 	async retain(strctr) {
 		let s = typeof strctr == "object" ? strctr : new strctr(),

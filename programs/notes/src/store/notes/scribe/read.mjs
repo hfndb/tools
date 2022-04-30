@@ -1,6 +1,6 @@
 "use strict";
-import { createReadStream, ReadStream } from "fs";
-import { join } from "path";
+import { createReadStream, ReadStream } from "node:fs";
+import { join } from "node:path";
 import { Queues } from "../../../queue.mjs";
 import { Lock } from "../../../file-system/lock.mjs";
 import {
@@ -151,6 +151,8 @@ export class Reader {
 			this.previous = this.previous.slice(vars.idxFound + 1);
 
 			let note = this.tpc.composeNote(this.strctr, obj);
+			// Not needed for Inquirer results:
+			Reflect.deleteProperty(note, "__structure");
 
 			this.iqr.processNote(note);
 			if (!note.toIgnore()) {

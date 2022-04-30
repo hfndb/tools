@@ -1,5 +1,5 @@
 "use strict";
-import { join } from "path";
+import { join } from "node:path";
 import { getDirList } from "../../../file-system/dirs.mjs";
 import { exec, test, FileUtils, log, Notes, Topic } from "../index.mjs";
 import { StoreManager } from "../manager.mjs";
@@ -60,8 +60,6 @@ export class Merger {
 
 	/**
 	 * Process a structure within a topic passed to mergeServer
-	 *
-	 * @private
 	 */
 	async processStructure() {
 		if (!test("-d", this.vars.rootPath)) return; // No files yet

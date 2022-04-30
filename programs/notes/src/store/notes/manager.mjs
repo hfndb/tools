@@ -1,5 +1,5 @@
 "use strict";
-import { join, sep } from "path";
+import { join, sep } from "node:path";
 import { getDirList } from "../../file-system/dirs.mjs";
 import { test, touch, FileUtils, StringExt, Notes, Topic } from "./index.mjs";
 import { Writer } from "./scribe/write.mjs";

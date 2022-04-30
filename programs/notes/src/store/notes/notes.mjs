@@ -1,6 +1,6 @@
 "use strict";
-import { Buffer } from "buffer";
-import { performance } from "perf_hooks";
+import { Buffer } from "node:buffer";
+import { performance } from "node:perf_hooks";
 import { Formatter } from "../../utils.mjs";
 import { StringExt, Note, Topic } from "./index.mjs";
 

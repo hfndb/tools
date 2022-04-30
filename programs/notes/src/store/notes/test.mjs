@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 import { Logger } from "../../../generic/log.mjs";
 import { Formatter } from "../../utils.mjs";
-import { randomUUID } from "crypto";
+import { randomUUID } from "node:crypto";
 import { StringExt, Note, Notes } from "./index.mjs";
 import { Kitchen, Recipe } from "./howto/structure.mjs";
 import { SampleInquiry } from "./howto/usage.mjs";

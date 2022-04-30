@@ -1,4 +1,5 @@
 "use strict";
+import { DateUtils } from "../../../../object.mjs";
 
 /** Transform variants aka types to string vice versa
  */
@@ -64,16 +65,18 @@ export default class TsvPlugin {
 					.replace(TsvPlugin.replacers.tab.regexFrom, "\t");
 				break;
 			case "date":
+				// Month readable but month for Date instance starts with index 0
 				rt = new Date(
 					parseInt(val.substring(0, 4)),
-					parseInt(val.substring(4, 6)),
+					parseInt(val.substring(4, 6)) - 1,
 					parseInt(val.substring(6, 8)),
 				);
 				break;
 			case "datetime":
+				// Month readable but month for Date instance starts with index 0
 				rt = new Date(
 					parseInt(val.substring(0, 4)),
-					parseInt(val.substring(4, 6)),
+					parseInt(val.substring(4, 6)) - 1,
 					parseInt(val.substring(6, 8)),
 					parseInt(val.substring(8, 10)),
 					parseInt(val.substring(10, 12)),
@@ -118,28 +121,10 @@ export default class TsvPlugin {
 				break;
 			case "date":
 			case "datetime":
-				if (!rt) return rt; // Empty date
-				rt =
-					val.getFullYear().toString() +
-					val
-						.getMonth()
-						.toString()
-						.padStart(2, "0") +
-					val
-						.getDate()
-						.toString()
-						.padStart(2, "0");
-
-				if (variant == "datetime")
-					rt +=
-						val
-							.getHours()
-							.toString()
-							.padStart(2, "0") +
-						val
-							.getMinutes()
-							.toString()
-							.padStart(2, "0");
+				if (!rt) return ""; // Empty date
+				let p = DateUtils.date2parts(val);
+				rt = `${p.year}${p.month}${p.day}`;
+				if (variant == "datetime") rt += `${p.hours}${p.minutes}`;
 				break;
 			case "array":
 			case "object":

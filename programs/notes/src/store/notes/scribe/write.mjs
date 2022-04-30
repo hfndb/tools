@@ -1,7 +1,7 @@
 "use strict";
-import { Buffer } from "buffer";
-import { appendFileSync } from "fs";
-import { join } from "path";
+import { Buffer } from "node:buffer";
+import { appendFileSync } from "node:fs";
+import { join } from "node:path";
 import { Lock } from "../../../file-system/lock.mjs";
 import { Queues } from "../../../queue.mjs";
 import {
