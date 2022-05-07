@@ -1,7 +1,6 @@
 "use strict";
-import shelljs from "shelljs";
+import { rm, test, touch } from "../sys.mjs";
 import { FileUtils } from "./files.mjs";
-const { rm, test, touch } = shelljs;
 
 export class Lock {
 	attempts = 0;

@@ -1,9 +1,8 @@
 "use strict";
 import { join, sep } from "node:path";
 import { fdir } from "fdir";
-import shelljs from "shelljs";
+import { test, touch } from "../sys.mjs";
 import { FileUtils } from "./files.mjs";
-const { test, touch } = shelljs;
 
 /**
  * Create a directory tree.
@@ -92,14 +91,13 @@ export function getDirList(path, recursive = true) {
 	if (!test("-e", path)) {
 		throw new Error(`Path ${path} doesn't exist`);
 	}
-	let opts = {
-		group: true,
-	};
-	if (!recursive) Object.assign(opts, { maxDepth: 0 });
-	const fl = new fdir().crawlWithOptions(path, opts).sync();
+	const fl = new fdir()
+		.onlyDirs()
+		.crawl(path)
+		.sync();
 	let dirs = [];
 	for (let d = 0; d < fl.length; d++) {
-		let dir = fl[d].dir;
+		let dir = fl[d];
 		dir = dir.substring(path.length + 1);
 		if (!dir) continue;
 		if (!recursive && dir.includes(sep)) continue;

@@ -72,7 +72,7 @@ Viewed like this, philosophy from the outside can interfere with truth within a 
 
 Instead of documenting in the usual way, some howto's have been added to this project as functional code examples. Which have also been used to run tests. Howto's can be found in the directory src/store/notes/howto:
 
-+ [structure.mjs](./src/store/notes/howto/structure.mjs): Shows how to create a Topic with one or more Structures during proejct configuration.
++ [structure.mjs](./src/store/notes/howto/structure.mjs): Shows how to create a Topic with one or more Structures during project configuration.
 + [usage.mjs](./src/store/notes/howto/usage.mjs): Shows how to handle notes and use Inquirer after a Topic and Structures are created.
 + [cron.mjs](./src/store/notes/howto/cron.mjs): Shows how to initiate automated tasks (maintainance, reporting) using [cron](https://en.wikipedia.org/wiki/Cron).
 

@@ -2,13 +2,12 @@
 import { readFileSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, extname, join, sep } from "node:path";
 import { fdir } from "fdir";
-import shelljs from "shelljs";
 import { AppConfig } from "../config.mjs";
 import { Logger } from "../log.mjs";
 import { ArrayUtils } from "../object.mjs";
+import { mkdir, mv, rm, test, touch } from "../sys.mjs";
 import { StringExt } from "../utils.mjs";
 import { getDirList } from "./dirs.mjs";
-const { mkdir, mv, rm, test, touch } = shelljs;
 
 /**
  * This file is created for and maintained in cookware-headless-ice
@@ -163,36 +162,32 @@ The structure of this file is invalid, meaning, messed up.
 			throw new Error("Path " + path + " doesn't exist");
 		}
 		let cfg = AppConfig.getInstance();
-		let allowedExtensions =
+		const allowedExtensions =
 			opts.allowedExtensions == undefined ? [] : opts.allowedExtensions;
-		let excludeList = opts.excludeList == undefined ? [] : opts.excludeList;
-		let recursive = opts.recursive == undefined ? true : opts.recursive;
-		let files = [];
-		let tns = {
-			group: true,
-		};
-		if (!recursive) Object.assign(tns, { maxDepth: 0 }); // No effect
-		const fl = new fdir().crawlWithOptions(path, tns).sync();
+		const excludeList = opts.excludeList == undefined ? [] : opts.excludeList;
+		const recursive = opts.recursive == undefined ? true : opts.recursive;
+		const fl = new fdir()
+			.withFullPaths()
+			.crawl(path)
+			.sync();
+		let file,
+			files = [];
 
 		for (let d = 0; d < fl.length; d++) {
-			let dir = fl[d].dir;
+			file = fl[d];
 
-			if (dir.startsWith(cfg.dirProject)) {
-				dir = dir.substring(path.length + 1);
+			if (file.startsWith(cfg.dirProject)) {
+				file = file.substring(path.length + 1);
 			}
 
-			if (!recursive && dir.length > 0) continue;
+			if ((!recursive && file.includes(sep)) || excludeList.includes(file))
+				continue;
 
-			for (let f = 0; f < fl[d].files.length; f++) {
-				let file = fl[d].files[f];
-				if (excludeList.includes(file)) continue;
-
-				if (
-					allowedExtensions.length == 0 ||
-					allowedExtensions.includes(extname(file))
-				) {
-					files.push(join(dir, file));
-				}
+			if (
+				allowedExtensions.length == 0 ||
+				allowedExtensions.includes(extname(file))
+			) {
+				files.push(file);
 			}
 		}
 		return files;
