@@ -10,7 +10,7 @@ import { join } from "path";
 // import { $, chalk, fs } from "zx";
 
 // Workaround using dynamic import. Directory import is not supported resolving ES modules
-let zx = await import(join(process.env.NODE_PATH, "zx/dist/index.cjs"));
+let zx = await import(join(process.env.NODE_PATH, "zx/build/index.js"));
 let tmpFile = "/tmp/template.html";
 
 // Read, replace

@@ -24,7 +24,7 @@ if (!process.env.NODE_PATH) {
 	console.error("Environment variable NODE_PATH not exported yet in ~/.bashrc");
 	process.exit(1);
 }
-let zx = await import(join(process.env.NODE_PATH, "zx/dist/index.cjs"));
+let zx = await import(join(process.env.NODE_PATH, "zx/build/index.js"));
 // ----------------------------------------------------------------------
 
 let vars = {
@@ -64,7 +64,7 @@ export class Files {
 	}
 
 	static async writeJSON(path, data) {
-		await zx.fs.outputJson(path, data);
+		return await zx.fs.outputJson(path, data);
 	}
 
 	static async writeFile(path, data, opts = undefined, verbose = true) {

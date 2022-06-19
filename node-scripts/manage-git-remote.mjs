@@ -85,7 +85,7 @@ class GitRemote {
 
 		// Clone remote to local
 		await GitRemote.prepLocalTemp();
-		await Misc.exec(`cd ${dirTemp}; git clone ssh://${sshLogin}${data.repoPath}/${remote}`, dry);
+		await Misc.exec(`cd ${dirTemp}; git clone ssh://${sshLogin}:${data.repoPath}/${remote}`, dry);
 
 		// Move cloned repositories in temp dir to local directory
 		await Misc.exec(`mv ${dirTemp}/${remote}/.git ${local}/`, dry);

@@ -118,7 +118,6 @@ async function showMenu(urge) {
 	// I'm here to help you...
 	let help = ``
 
-	let done = false;
 	if (urge) {
 		console.log(`
 
@@ -153,14 +152,23 @@ So... once again:`);
 	Misc.menuItem("1.  Transform .srt file to .txt (both utf8 encoded)");
 	Misc.menuItem("2.  Transform .txt file to .html");
 	Misc.menuSpace();
+	// Hide choices 1 and 2, enable choices c and q 😀
 	let choice = await Misc.ask(`Your choice please [${headers.choices}]: `);
 
+	let done = true;
 	switch (choice) {
 		case "1":
 			await srtToTxt();
 			break;
 		case "2":
 			await txtToHtml();
+			break;
+		case "c":
+		case "q":
+			break;
+		case "2":
+		default:
+			done = false;
 			break;
 	}
 
