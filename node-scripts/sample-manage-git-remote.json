@@ -1,8 +1,10 @@
 {
 	"user": "me",
 	"server": "remote",
-	"repoPath": "/paht/to/git/repositories",
-	"autoPull": [0],
+	"repoPath": "/path/to/git/repositories",
+	"autoPull": [
+		"name-remote-repository"
+	],
 	"items": [
 		[
 			"/path/to/local/repository",
