@@ -86,6 +86,14 @@ class Task {
 	}
 
 	/**
+	 * See whether last run is > minutes ago
+	 */
+	moreThanMinutesAgo(minutes) {
+		let diff = nw.getTime() - this.lastModified; // In ms
+		return  diff / (1000 * 60) > minutes;
+	}
+
+	/**
 	 * Same calendar day regardless of year
 	 */
 	isSameDayMonth(ref) {
@@ -127,6 +135,16 @@ class DailyOnce {
 	}
 }
 
+class Repeat {
+	static async process(t) {
+		let tsk = new Task(t.id);
+		if (tsk.firstRun || tsk.moreThanMinutesAgo(t.minutes)) {
+			await Generic.triggerNotification(t.descr);
+			tsk.finish();
+		}
+	}
+}
+
 // --------------------------------------------------------------------
 // Main
 // --------------------------------------------------------------------
@@ -137,12 +155,16 @@ writeFileSync(tmpFile, ""); // Create clean temp file
 
 for (let i = 0; i < tasks.length; i++) {
 	let t = tasks[i];
+	if (t.active != undefined && !t.active) continue;
 	switch (t.type) {
 		case "birthday":
 			await Birthday.process(t);
 			break;
 		case "daily-once":
 			await DailyOnce.process(t);
+			break;
+		case "repeat":
+			await Repeat.process(t);
 			break;
 	}
 }

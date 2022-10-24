@@ -48,6 +48,8 @@ fi
 # ------------------------------
 press_enter() {
   echo ""
+  echo "Results also written to $LOG"
+  echo ""
   echo -n "	Press Enter to continue "
   read
   clear

@@ -1,10 +1,10 @@
 #! /usr/bin/env node
-import { statSync } from "fs";
-import { promisify } from "util";
-import { homedir, platform, tmpdir } from "os";
-import { basename, dirname, join, normalize } from "path";
-import { fileURLToPath } from "url";
-import { exec as execOrg } from "child_process"
+import { exec as execOrg } from "node:child_process"
+import { statSync } from "node:fs";
+import { promisify } from "node:util";
+import { homedir, platform, tmpdir } from "node:os";
+import { basename, dirname, join, normalize } from "node:path";
+import { fileURLToPath } from "node:url";
 const exec = promisify(execOrg);
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -128,6 +128,13 @@ export class Misc {
 	 */
 	static getArgs() {
 		return zx.argv;
+	}
+
+	/**
+	 * Get carriage return aka line end
+	 */
+	static getCr(forWindows = false) {
+		return forWindows ? "\r\n" : "\r"
 	}
 
 	static menuHeader(msg) {

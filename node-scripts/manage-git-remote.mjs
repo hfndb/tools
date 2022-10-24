@@ -46,10 +46,13 @@ class GitRemote {
 	 * Auto-pull specified list of repositories
 	 */
 	static async autoPull() {
+		let idx, item, name, path;
 		for (let i = 0; i < data.autoPull.length; i++) {
-			let idx = data.autoPull[i];
-			let item = data.items[idx];
-			let path = item[0];
+			name = data.autoPull[i];
+			idx = data.items.findIndex(el => el[1] == name);
+			if (idx < 0) continue;
+			item = data.items[idx];
+			path = item[0];
 			console.log(`Pulling ${item[1]}`);
 			await Misc.exec(`cd ${path}; git pull`, dry);
 		}

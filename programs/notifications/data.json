@@ -5,15 +5,24 @@
 	}
 	{
 		"type": "birthday",
+		"active": true,
 		"descr": "Test birthday",
 		"date": "1967-12-31",
 		"id": 0
 	},
 	{
 		"type": "daily-once",
+		"active": true,
 		"descr": "Daily once",
 		"hour": 10,
 		"minute": 0,
 		"id": 1
+	},
+	{
+		"type": "repeat",
+		"active": true,
+		"descr": "Repeat every 5 minutes",
+		"minutes": 5,
+		"id": 2
 	}
 ]
