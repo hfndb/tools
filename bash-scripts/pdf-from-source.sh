@@ -10,12 +10,17 @@
 #
 
 FILE_IN=$1
-FILE_OUT=/tmp/output.pdf
+MARGIN="10mm"
+PDF_DIR=`dirname $FILE_IN`
+PDF_STEM=`basename $FILE_IN | cut -d'.' -f1`
+PDF_PATH=$PDF_DIR/$PDF_STEM.pdf
+
 vim -c 'call ExportToHtml()' $FILE_IN
 
-echo "Creating PDF file $FILE_OUT..."
+echo "Creating PDF file $PDF_PATH..."
 wkhtmltopdf -q \
 	-s A4 \
 	--encoding UTF-8 \
-	-L 10mm -R 10mm  \
-	/tmp/exported.html $FILE_OUT
+	-B $MARGIN -T $MARGIN \
+	-L $MARGIN -R $MARGIN \
+	/tmp/exported.html $PDF_PATH
