@@ -10,12 +10,13 @@ In this repo some notes and tools that I use in a Linux environment, [Kubuntu](h
   - t - Use ctags-exuberant or ctags-universal to generate a tags file in the current directory. If using [cookware-headless-ice](https://github.com/hfndb/cookware-headless-ice), this script doesn't need to be used.
 
 * Node scripts:
-  - clean-bash-history.mjs: Clean ~/.bash_history and append configured items
+  - clean-bash-history.mjs: Clean ~/.bash_history and append configured items.
+  - html-to-pdf.mjs: Watch a .html file for changes and use the [puppeteer](https://www.npmjs.com/package/puppeteer) package to generate a PDF file. Or don't watch but generate a PDF file.
   - manage-git-remote.mjs: Manage remote repositories. Configure, create, install, list, auto-pack remotes, auto-pull remotes. Menu driven.
   - srt.mjs: Convert .srt files for subtitles of films to readable .txt without time codes. And convert what's in a .txt file to .html (br tags added). Menu driven.
 
 * Programs:
-	- [Email](./programs/email/readme.md) Tiny system to write and spell check email
+	- [Email](./programs/email/readme.md) Tiny system to write and spell check email.
 	- [Notifications](./programs/notifications/readme.md) Tiny program to show system notifications as a modal dialog or popups from the system tray: Birthdays, once a year and 'once a day notifications' like alarm signals or reminders.
 
 * [Vim](./vim/readme.md) with notes about installation, configuration and utility script(s)
@@ -51,7 +52,5 @@ $ cd /opt
 $ git clone https://github.com/hfndb/tools
 
 ```
-
-See also [Vim](./vim/readme.md)
 
 [comment]: <> (No comments here)

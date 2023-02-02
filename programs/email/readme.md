@@ -21,14 +21,14 @@ In ~/.basrc I have added aliasses:
 ```bash
 # mi to initialize or resume writing
 alias mi=/absolute/path/to/tools/programs/email/init-writing.sh
-# Resulting temp file is bookmarked in web browser
+# Resulting temp file is opened (and bookmarked?) in web browser
 
 # mp to prepare email for sending
 alias mp=/absolute/path/to/tools/programs/email/prepare.sh
 # Usage: mp <language code, default en>
 
 # ms to strip <br> from sent emails, for the purpose of archiving
-alias ms=/absolute/path/to/tools/programs/email/strip-br.mjs
+alias ms=/absolute/path/to/tools/programs/email/strip.sh
 ```
 
 

@@ -1,10 +1,10 @@
 #! /usr/bin/env node
+import { join } from "node:path";
 
 /**
- * Script to replace <br>\n<br> with \n
+ * Script for archiving purposes,
+ *   to replace <br>\n<br> with \n
  */
-
-import { join } from "path";
 
 // Bug in Node.js: Cannot find global package
 // import { $, chalk, fs } from "zx";

@@ -36,8 +36,8 @@ class GitRemote {
 	static async list(idx, local, remote) {
 		console.log(
 			idx.toString().padEnd(5, " ") +
-			remote.toString().padEnd(40, " ") +
-			local.toString()
+				remote.toString().padEnd(40, " ") +
+				local.toString(),
 		);
 		Files.pathExists(local, false);
 	}
@@ -82,13 +82,18 @@ class GitRemote {
 		}
 
 		// Create remote repository
-		await Misc.exec(`ssh ${sshLogin} ` +
-			`'cd ${data.repoPath}; mkdir ${remote}; cd ${remote}; git --bare init'`,
-			dry);
+		await Misc.exec(
+			`ssh ${sshLogin} ` +
+				`'cd ${data.repoPath}; mkdir ${remote}; cd ${remote}; git --bare init'`,
+			dry,
+		);
 
 		// Clone remote to local
 		await GitRemote.prepLocalTemp();
-		await Misc.exec(`cd ${dirTemp}; git clone ssh://${sshLogin}:${data.repoPath}/${remote}`, dry);
+		await Misc.exec(
+			`cd ${dirTemp}; git clone ssh://${sshLogin}:${data.repoPath}/${remote}`,
+			dry,
+		);
 
 		// Move cloned repositories in temp dir to local directory
 		await Misc.exec(`mv ${dirTemp}/${remote}/.git ${local}/`, dry);
@@ -105,12 +110,15 @@ class GitRemote {
 
 		Misc.menuSpace();
 		console.log(`Uploading to remote ${data.server}`);
-		await Misc.exec(`ssh ${sshLogin} ` +
-			`'cd ${data.repoPath}; rm -rf ${remote}; mkdir ${remote}'`,
-			dry);
-		await Misc.exec(`cd ${dirRepo}; ` +
-			`rsync -ra ./ ${sshLogin}:${data.repoPath}/${remote}`,
-			dry);
+		await Misc.exec(
+			`ssh ${sshLogin} ` +
+				`'cd ${data.repoPath}; rm -rf ${remote}; mkdir ${remote}'`,
+			dry,
+		);
+		await Misc.exec(
+			`cd ${dirRepo}; ` + `rsync -ra ./ ${sshLogin}:${data.repoPath}/${remote}`,
+			dry,
+		);
 		Misc.menuSpace();
 	}
 
@@ -153,8 +161,8 @@ function packRepository {
 	static async showMenu() {
 		let done = false;
 		Misc.menuSpace();
-		Misc.menuHeader("Manage repositories at server " +
-		Misc.color().blue(data.server)
+		Misc.menuHeader(
+			"Manage repositories at server " + Misc.color().blue(data.server),
 		);
 		Misc.menuSpace();
 		Misc.menuItem("1.  List");

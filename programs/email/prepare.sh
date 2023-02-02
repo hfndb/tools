@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Prepare for sending
+# Prepare for sending by email
 
 cd `dirname $0`
 if [ -f ./custom/env.sh ]; then
@@ -14,7 +14,12 @@ if [ "$LANGUAGE" == "" ]; then
 	LANGUAGE=$DEFAULT_LANGUAGE
 fi
 
-# Extract email from template
+# Extract email from template and write a temp file
+DIR=`dirname $FILE_TMP`
+if [ ! -d $DIR ]; then
+	mkdir -p $DIR
+fi
+# ./edits.mjs e $FILE_TMP $FILE_ORG
 sed -n '/@ -->/,/<!-- @/p' $FILE_ORG | \
 	# Remove surrouding tags
 	sed '/-->/d' | \

@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-import { exec as execOrg } from "node:child_process"
+import { exec as execOrg } from "node:child_process";
 import { statSync } from "node:fs";
 import { promisify } from "node:util";
 import { homedir, platform, tmpdir } from "node:os";
@@ -31,17 +31,16 @@ let vars = {
 	root: normalize(join(__dirname, "..")),
 	bashSripts: "",
 	nodeScripts: "",
-	tmpDir: tmpdir()
-}
+	tmpDir: tmpdir(),
+};
 vars.bashScripts = join(vars.root, "bash-scripts");
 vars.nodeScripts = join(vars.root, "node-scripts");
 
 // ----------------------------------------------------------------------
 
-export {basename, dirname, join, homedir, statSync, vars};
+export { basename, dirname, join, homedir, statSync, vars };
 
 export class Files {
-
 	static async mkDir(directory) {
 		await zx.fs.ensureDir(directory);
 	}
@@ -73,8 +72,7 @@ export class Files {
 			if (verbose) {
 				console.log(`${path} written`);
 			}
-		}
-		catch (err) {
+		} catch (err) {
 			console.error(zx.chalk.red(`Error writing file ${path}\n`), err);
 		}
 	}
@@ -96,7 +94,7 @@ export class Misc {
 
 	static async exec(cmd, dry = false, returnOutput = false) {
 		if (dry) {
-			console.log(cmd)
+			console.log(cmd);
 			return;
 		}
 
@@ -111,16 +109,19 @@ export class Misc {
 		try {
 			await zx.$`${cmd}`.pipe(process.stdout);
 		} catch (p) {
-			console.log(`Exit code: ${p.exitCode}`)
-			console.log(`Error: ${p.stderr}`)
+			console.log(`Exit code: ${p.exitCode}`);
+			console.log(`Error: ${p.stderr}`);
 		}
 	}
 
 	/**
-	 * Get the first anonymous parameter
+	 * Get a positional parameter
+	 *
+	 * @param {number} [which]
 	 */
-	static getArg() {
-		return zx.argv._[0] || "";
+	static getArg(which = 0) {
+		which += 2; // First par isn't at 0 but at 2
+		return process.argv[which] || "";
 	}
 
 	/**
@@ -131,10 +132,43 @@ export class Misc {
 	}
 
 	/**
+	 * Transform string in format dd-mm-yyyy to Date object
+	 *
+	 * @param {string} str
+	 * @returns {Date|null}
+	 */
+	static str2date(str) {
+		let lst = str.split("-") || "";
+		if (!lst) return null;
+		return new Date(lst[2], lst[1], lst[0]);
+	}
+
+	/**
+	 * Get difference between dates
+	 *
+	 * @param {Date} dFrom
+	 * @param {Date} dTo
+	 * @returns {Object}
+	 */
+	static getDateDiff(dFrom, dTo) {
+		let dTime = dTo.getTime() - dFrom.getTime(); // Time
+
+		let rt = {
+			days: Math.floor(dTime / (1000 * 60 * 60 * 24)),
+			years: 0,
+		};
+
+		rt.years = rt.days / 365; // float
+		rt.years = Math.round(rt.years * 100) / 100; // decimal, 2 digits
+
+		return rt;
+	}
+
+	/**
 	 * Get carriage return aka line end
 	 */
 	static getCr(forWindows = false) {
-		return forWindows ? "\r\n" : "\r"
+		return forWindows ? "\r\n" : "\r";
 	}
 
 	static menuHeader(msg) {
