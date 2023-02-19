@@ -16,19 +16,35 @@ Some ingredients: I like to write in pure HTML and to view the result in a web b
 
 ## Installation
 
-In ~/.basrc I have added aliasses:
+In ~/.basrc I have added exports and aliasses:
 
 ```bash
+# Export of variables used by manage.mjs and wrapper.sh
+export EMAIL_PRROGRAM=/absolute/path/to/tools/programs/email
+export EMAIL_SESSIONS=/absolute/path/to/email-sessions
+export EMAIL_TEMPLATE=/absolute/path/to/tools/programs/email/template.html
+export EMAIL_TMP=/tmp/template.html
+export EMAIL_BROWSER=firefox
+export EMAIL_DEFAULT_LANGUAGE=en
+export EMAIL_EDITOR=kate
+
 # mi to initialize or resume writing
-alias mi=/absolute/path/to/tools/programs/email/init-writing.sh
+alias mi="$EMAIL_PRROGRAM/wrapper.sh init"
 # Resulting temp file is opened (and bookmarked?) in web browser
 
 # mp to prepare email for sending
-alias mp=/absolute/path/to/tools/programs/email/prepare.sh
-# Usage: mp <language code, default en>
+alias mp="$EMAIL_PRROGRAM/wrapper.sh prep"
+# Usage: mp [language code - default EMAIL_DEFAULT_LANGUAGE]
 
 # ms to strip <br> from sent emails, for the purpose of archiving
-alias ms=/absolute/path/to/tools/programs/email/strip.sh
+alias ms="$EMAIL_PRROGRAM/manage.mjs strip"
+
+# msessions to manage email sessions
+alias msessions="$EMAIL_PRROGRAM/manage.mjs sessions"
+
+# mpdf to generate a PDF from template.html, parameter w to begin watching
+alias mpdf="/absolute/path/to/tools/node-scripts/html-to-pdf.mjs $EMAIL_TEMPLATE"
+
 ```
 
 
