@@ -13,7 +13,9 @@ In this repo some notes and tools that I use in a Linux environment, [Kubuntu](h
   - clean-bash-history.mjs: Clean ~/.bash_history and append configured items.
   - html-to-pdf.mjs: Watch a .html file for changes and use the [puppeteer](https://www.npmjs.com/package/puppeteer) package to generate a PDF file. Or don't watch but generate a PDF file.
   - manage-git-remote.mjs: Manage remote repositories. Configure, create, install, list, auto-pack remotes, auto-pull remotes. Menu driven.
-  - srt.mjs: Convert .srt files for subtitles of films to readable .txt without time codes. And convert what's in a .txt file to .html (br tags added). Menu driven.
+  - srt.mjs: Transform .srt files for subtitles of films to readable .txt without time codes. And convert what's in a .txt file to .html (br tags added). Menu driven.
+- md-to-html/convert.mjs: Transform .md file to tempated .html file
+- md-to-html/wrapper.sh: Transform .md file to .pdf file, in background using .html file output by convert.mjs
 
 * Programs:
 	- [Email](./programs/email/readme.md) Tiny system to write and spell check email.

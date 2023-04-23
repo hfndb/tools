@@ -16,13 +16,13 @@ if [ "$ACTION" == "init" ]; then
 
 	if [ "$CONTINUE" == "n" ]; then
 		# Backup previous email, just to be sure
-		cp -f $EMAIL_TEMPLATE $EMAIL_TEMPLATE.bak
+		cp -af $EMAIL_TEMPLATE $EMAIL_TEMPLATE.bak
 		# Prepare next email
 		CUSTOMIZED=./custom/template-org.html
 		if [ -f $CUSTOMIZED ]; then
-			cp -f $CUSTOMIZED $EMAIL_TEMPLATE
+			cp -af $CUSTOMIZED $EMAIL_TEMPLATE
 		else
-			cp -f ./template-org.html $EMAIL_TEMPLATE
+			cp -af ./template-org.html $EMAIL_TEMPLATE
 		fi
 	fi
 
