@@ -1,5 +1,5 @@
 #! /usr/bin/env node
-import { marked } from 'marked';
+import { marked } from "marked";
 import { Files, Misc, join, vars } from "../lib.mjs";
 
 /**
@@ -14,7 +14,7 @@ let data = {
 	out: "",
 	path: args[0] || "",
 	title: args[1] || "",
-	template: join(vars.root, "node-scripts", "md-to-html", "template.html"),
+	template: join(vars.nodeScripts, "md-to-html", "template.html"),
 };
 
 // Read files into vars

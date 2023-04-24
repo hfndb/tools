@@ -275,4 +275,10 @@ export class Misc {
 	static menuSpace() {
 		console.log("");
 	}
+
+	static async getSettings() {
+		let path = join(vars.nodeScripts, "settings.json");
+		if (!Files.pathExists(path, false)) return {};
+		return await Files.readJSON(path);
+	}
 }

@@ -32,13 +32,24 @@ const browser = await puppeteer.launch({ headless: true });
 
 class Manage {
 	static async writePDF() {
+		let settings = await Misc.getSettings();
+		if (!settings?.htmlToPdf?.margin) {
+			settings.htmlToPdf = {};
+			settings.htmlToPdf.margin = {
+				top: "50px",
+				right: "50px",
+				bottom: "50px",
+				left: "50px",
+			};
+		}
+
 		process.stdout.write("Writing PDF...");
 		let page = await browser.newPage();
 		await page.goto("file://" + vars.html, { waitUntil: "networkidle0" });
 		await page.emulateMediaType("print");
 		await page.pdf({
 			path: vars.output,
-			margin: { top: "50px", right: "50px", bottom: "50px", left: "50px" },
+			margin: settings.htmlToPdf.margin,
 			printBackground: true,
 			format: "A4",
 		});
