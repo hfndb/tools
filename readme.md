@@ -52,6 +52,7 @@ $ sudo npm install -g ascii-table3 zx
 # Get this git repository, tools:
 $ cd /opt
 $ git clone https://github.com/hfndb/tools
+$ npm install
 
 ```
 
