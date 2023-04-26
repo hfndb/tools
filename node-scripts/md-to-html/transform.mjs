@@ -3,9 +3,9 @@ import { marked } from "marked";
 import { Files, Misc, join, vars } from "../lib.mjs";
 
 /**
- * Script to convert .rst to .html
+ * Script to transform .md to .html
  *
- * Usage: main.mjs file-in title
+ * Usage: transform.mjs file-in title
  */
 let args = Misc.getArgs()._;
 

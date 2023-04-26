@@ -10,12 +10,17 @@ import { Files, Misc } from "./lib.mjs";
  * Pre-conditions: Puppeteer doesn't work with global install, so:
  *   npm -i puppeteer
  *
- * Usage: html-to-pdf.mjs /path/to/file.html /path/to/output-file.pdf [w for watch]
+ * Usage:
+ *   One file:
+ *     html-to-pdf.mjs /path/to/file.html /path/to/output-file.pdf [w for watch]
+ *   Batch as registered in .json file
+ *     html-to-pdf.mjs /path/to/batch.json
  *
  * @see https://blog.risingstack.com/pdf-from-html-node-js-puppeteer/
  * @see https://www.bannerbear.com/blog/how-to-convert-html-into-pdf-with-node-js-and-puppeteer/
  */
 
+let browser;
 let vars = {
 	changed: Date.now(),
 	html: Misc.getArg(),
@@ -23,18 +28,22 @@ let vars = {
 	watch: Misc.getArg(2),
 };
 
-// Check and succeed or fail and exit
-Files.pathExists(vars.html);
+export class Manage {
+	static async init() {
+		// Create a browser instance and load
+		console.log("Initializing...");
+		browser = await puppeteer.launch({ headless: true });
+	}
 
-// Create a browser instance and load
-console.log(`Initializing. Will write PDF file to ${vars.output}.`);
-const browser = await puppeteer.launch({ headless: true });
+	static async writePDF(opts) {
+		// Check and succeed or fail and exit
+		Files.pathExists(opts.html);
 
-class Manage {
-	static async writePDF() {
+		await Files.mkDir(dirname(opts.output));
+
 		let settings = await Misc.getSettings();
 		if (!settings?.htmlToPdf?.margin) {
-			settings.htmlToPdf = {};
+			if (!settings.htmlToPdf) settings.htmlToPdf = {};
 			settings.htmlToPdf.margin = {
 				top: "50px",
 				right: "50px",
@@ -43,18 +52,18 @@ class Manage {
 			};
 		}
 
-		process.stdout.write("Writing PDF...");
+		process.stdout.write(`Writing ${opts.output}...`);
 		let page = await browser.newPage();
-		await page.goto("file://" + vars.html, { waitUntil: "networkidle0" });
+		await page.goto("file://" + opts.html, { waitUntil: "networkidle0" });
 		await page.emulateMediaType("print");
 		await page.pdf({
-			path: vars.output,
+			path: opts.output,
 			margin: settings.htmlToPdf.margin,
 			printBackground: true,
 			format: "A4",
 		});
 		/*
-		 * const html = await Files.readFile(vars.html);
+		 * const html = await Files.readFile(opts.html);
 		 * await page.setContent(html, { waitUntil: 'domcontentloaded' });
 		 *	setContent() doesn't read .css and .js
 		 */
@@ -78,6 +87,7 @@ class Manage {
 }
 
 if (vars.watch) {
+	await Manage.init();
 	let wtch = watch(
 		vars.html,
 		{
@@ -91,7 +101,9 @@ if (vars.watch) {
 
 	process.on("SIGINT", Manage.shutdown); // Ctrl-c
 	process.on("SIGTERM", Manage.shutdown); // Kill process otherwise
-} else {
-	await Manage.writePDF();
+} else if (vars.output) {
+	// Command line, one file
+	await Manage.init();
+	await Manage.writePDF(vars);
 	await Manage.shutdown();
 }

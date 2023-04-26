@@ -79,7 +79,7 @@ export class Files {
 	static pathExists(file, exit = true) {
 		let exists = zx.fs.existsSync(file);
 		if (!exists) {
-			console.error(zx.chalk.red(`File ${file} doesn't exist`));
+			console.trace(zx.chalk.red(`File ${file} doesn't exist`));
 			if (exit) process.exit(1);
 		}
 		return exists;
