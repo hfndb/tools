@@ -16,9 +16,10 @@ In this repo some notes and tools that I use in a Linux environment, [Kubuntu](h
   - srt.mjs: Transform .srt files for subtitles of films to readable .txt without time codes. And convert what's in a .txt file to .html (br tags added). Menu driven.
   - md-to-html/convert.mjs: Transform .md file to templated .html file
   - md-to-html/wrapper.sh: Transform .md file to .pdf file, in background using .html file output by convert.mjs
+  - md-to-html/batch.mjs: Use a settings.json file for a batch to transform from .md files to .pdf files. All .md files in settings.json (entry fileIn) are relative to the directory where the settings.json file is put.
 
 * Programs:
-	- [Email](./programs/email/readme.md) Tiny system to write and spell check email.
+	- [Email](./programs/email/readme.md) Tiny system to write and spell check email. Scripts in node-scripts/md-to-html are based on .css in this tiny project.
 	- [Notifications](./programs/notifications/readme.md) Tiny program to show system notifications as a modal dialog or popups from the system tray: Birthdays, once a year and 'once a day notifications' like alarm signals or reminders.
 
 * [Vim](./vim/readme.md) with notes about installation, configuration and utility script(s)
