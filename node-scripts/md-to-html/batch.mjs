@@ -35,7 +35,7 @@ for (let i = 0; i < data.items.length; i++) {
 	const path = join(data.dirProject, item.fileIn);
 
 	// Only generate pdf if .md is changed since last time
-	if (Files.pathExists(item.fileOut, false)) {
+	if (Files.pathExists(item.fileOut, false, false)) {
 		data.modifiedMd = Files.getLastModified(path);
 		data.modifiedPdf = Files.getLastModified(item.fileOut);
 		if (data.modifiedPdf > data.modifiedMd) continue;

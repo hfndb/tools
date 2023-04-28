@@ -82,11 +82,12 @@ export class Files {
 
 	/**
 	 * @param {string} file
-	 * @param {boolean} exit If error terminate
+	 * @param {boolean} [exit]
+	 * @param {boolean} [verbose]
 	 */
-	static pathExists(file, exit = true) {
+	static pathExists(file, exit = true, verbose = true) {
 		let exists = zx.fs.existsSync(file);
-		if (!exists) {
+		if (!exists && verbose) {
 			console.trace(zx.chalk.red(`File ${file} doesn't exist`));
 			if (exit) process.exit(1);
 		}
