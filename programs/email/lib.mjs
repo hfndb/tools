@@ -73,6 +73,14 @@ export class Files {
 	}
 
 	/**
+	 * @param {string} path
+	 * @returns {number}
+	 */
+	static getLastModified(path) {
+		return statSync(path).mtimeMs;
+	}
+
+	/**
 	 * @param {string} file
 	 * @param {boolean} exit If error terminate
 	 */

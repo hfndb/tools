@@ -13,10 +13,13 @@ let args = Misc.getArgs()._;
 
 let data = {
 	content: "",
+	dirProject: "",
 	items: null,
+	modifiedMd: 0,
+	modifiedPdf: 0,
 	out: "",
 	path: args[0] || "",
-	dirProject: "",
+	tmpFile: "/tmp/md2.html",
 };
 
 Files.pathExists(data.path);
@@ -31,14 +34,24 @@ for (let i = 0; i < data.items.length; i++) {
 	const item = data.items[i];
 	const path = join(data.dirProject, item.fileIn);
 
+	// Only generate pdf if .md is changed since last time
+	if (Files.pathExists(item.fileOut, false)) {
+		data.modifiedMd = Files.getLastModified(path);
+		data.modifiedPdf = Files.getLastModified(item.fileOut);
+		if (data.modifiedPdf > data.modifiedMd) continue;
+	}
+
 	// Generate temp .html
 	await Misc.exec(`${script} ${path} "${item.title}"`);
 
 	// Then generate .pdf
 	await Manage.writePDF({
-		html: "/tmp/md2.html",
+		html: data.tmpFile,
 		output: item.fileOut,
 	});
+
+	// Cleanup
+	Files.erase(data.tmpFile);
 }
 
 await Manage.shutdown();

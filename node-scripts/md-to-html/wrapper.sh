@@ -23,3 +23,4 @@ TITLE=${TITLE,,} # to lower case
 TITLE="${TITLE// /-}"  # replace spaces with -
 PDF_PATH=/tmp/$TITLE.pdf
 ../html-to-pdf.mjs $FILE_IN $PDF_PATH
+rm $FILE_IN
