@@ -23,6 +23,7 @@ import { Files, Misc } from "./lib.mjs";
 let browser;
 let vars = {
 	changed: Date.now(),
+	engine: Misc.getArg(3) || "puppeteer",
 	html: Misc.getArg(),
 	output: Misc.getArg(1),
 	watch: Misc.getArg(2),
@@ -30,9 +31,11 @@ let vars = {
 
 export class Manage {
 	static async init() {
-		// Create a browser instance and load
-		console.log("Initializing...");
-		browser = await puppeteer.launch({ headless: true });
+		if (vars.engine == "puppeteer") {
+			// Create a browser instance and load
+			console.log("Initializing...");
+			browser = await puppeteer.launch({ headless: true });
+		}
 	}
 
 	static async writePDF(opts) {
@@ -51,22 +54,40 @@ export class Manage {
 				left: "50px",
 			};
 		}
+		const m = settings.htmlToPdf.margin; // shorthand
 
 		process.stdout.write(`Writing ${opts.output}...`);
-		let page = await browser.newPage();
-		await page.goto("file://" + opts.html, { waitUntil: "networkidle0" });
-		await page.emulateMediaType("print");
-		await page.pdf({
-			path: opts.output,
-			margin: settings.htmlToPdf.margin,
-			printBackground: true,
-			format: "A4",
-		});
-		/*
-		 * const html = await Files.readFile(opts.html);
-		 * await page.setContent(html, { waitUntil: 'domcontentloaded' });
-		 *	setContent() doesn't read .css and .js
-		 */
+		if (opts.engine == "puppeteer") {
+			// Slower than wkhtmltopdf, better quality,
+			// though without bookmarking headers in PDF
+			let page = await browser.newPage();
+			await page.goto("file://" + opts.html, { waitUntil: "networkidle0" });
+			await page.emulateMediaType("print");
+			await page.pdf({
+				path: opts.output,
+				margin: settings.htmlToPdf.margin,
+				printBackground: true,
+				format: "A4",
+			});
+			/*
+			 * const html = await Files.readFile(opts.html);
+			 * await page.setContent(html, { waitUntil: 'domcontentloaded' });
+			 *	setContent() doesn't read .css and .js
+			 */
+		} else if (opts.engine == "wkhtmltopdf") {
+			// TODO Makes fontsize smaller than using puppeteer, doesn't run JavaScript
+			let cmd = "wkhtmltopdf -q ";
+			cmd += "-s A4 ";
+			cmd += `-B ${m.bottom} -T ${m.top} `;
+			cmd += `-L ${m.left} -R ${m.right} `;
+			cmd += "--encoding UTF-8 ";
+			cmd += "--enable-local-file-access ";
+			cmd += "--enable-javascript ";
+			cmd += "--load-error-handling ignore ";
+			cmd += "--print-media-type ";
+			cmd += `${opts.html} ${opts.output} `;
+			await Misc.exec(cmd);
+		}
 		console.log("  done");
 	}
 
@@ -81,8 +102,10 @@ export class Manage {
 	}
 
 	static async shutdown() {
-		// Close the browser instance
-		await browser.close();
+		if (vars.engine == "puppeteer") {
+			// Close the browser instance
+			await browser.close();
+		}
 	}
 }
 

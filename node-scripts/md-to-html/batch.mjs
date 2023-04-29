@@ -14,9 +14,6 @@ let args = Misc.getArgs()._;
 let data = {
 	content: "",
 	dirProject: "",
-	items: null,
-	modifiedMd: 0,
-	modifiedPdf: 0,
 	out: "",
 	path: args[0] || "",
 	tmpFile: "/tmp/md2.html",
@@ -24,30 +21,32 @@ let data = {
 
 Files.pathExists(data.path);
 data.dirProject = dirname(data.path);
-data.items = await Files.readJSON(data.path);
 
 const script = join(vars.nodeScripts, "md-to-html", "transform.mjs");
+const settings = await Files.readJSON(data.path);
 
 await Manage.init();
 
-for (let i = 0; i < data.items.length; i++) {
-	const item = data.items[i];
-	const path = join(data.dirProject, item.fileIn);
+for (let i = 0; i < settings.batch.length; i++) {
+	const item = settings.batch[i];
+	const fileIn = join(data.dirProject, item.fileIn);
+	const fileOut = join(settings.dirPdf, item.fileOut);
 
 	// Only generate pdf if .md is changed since last time
-	if (Files.pathExists(item.fileOut, false, false)) {
-		data.modifiedMd = Files.getLastModified(path);
-		data.modifiedPdf = Files.getLastModified(item.fileOut);
-		if (data.modifiedPdf > data.modifiedMd) continue;
+	if (Files.pathExists(fileOut, false, false)) {
+		const modifiedMd = Files.getLastModified(fileIn);
+		const modifiedPdf = Files.getLastModified(fileOut);
+		if (modifiedPdf > modifiedMd) continue;
 	}
 
 	// Generate temp .html
-	await Misc.exec(`${script} ${path} "${item.title}"`);
+	await Misc.exec(`${script} ${fileIn} "${item.title}"`);
 
 	// Then generate .pdf
 	await Manage.writePDF({
+		engine: settings.engine,
 		html: data.tmpFile,
-		output: item.fileOut,
+		output: fileOut,
 	});
 
 	// Cleanup

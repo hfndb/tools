@@ -1,7 +1,11 @@
-[
-	{
-		"fileIn": "log/2023-04.md",
-		"fileOut": "/tmp/md2pdf/log/2023-04-logbook.pdf",
-		"title": "/tmp/md2pdf/log/2023-04 Logbook"
-	}
-]
+{
+	"engine": "puppeteer",
+	"dirPdf": "/tmp/md2pdf",
+	"batch": [
+		{
+			"fileIn": "log/2023-04.md",
+			"fileOut": "log/2023-04-logbook.pdf",
+			"title": "2023-04 Logbook"
+		}
+	]
+}
