@@ -44,20 +44,21 @@ export class Manage {
 
 		await Files.mkDir(dirname(opts.output));
 
+		const p = opts.engine == "puppeteer"; // shorthand
 		let settings = await Misc.getSettings();
 		if (!settings?.htmlToPdf?.margin) {
 			if (!settings.htmlToPdf) settings.htmlToPdf = {};
 			settings.htmlToPdf.margin = {
-				top: "50px",
-				right: "50px",
-				bottom: "50px",
-				left: "50px",
+				top: p ? "50px" : "10mm",
+				right: p ? "50px" : "10mm",
+				bottom: p ? "50px" : "10mm",
+				left: p ? "50px" : "10mm",
 			};
 		}
 		const m = settings.htmlToPdf.margin; // shorthand
 
 		process.stdout.write(`Writing ${opts.output}...`);
-		if (opts.engine == "puppeteer") {
+		if (p) {
 			// Slower than wkhtmltopdf, better quality,
 			// though without bookmarking headers in PDF
 			let page = await browser.newPage();
@@ -83,8 +84,16 @@ export class Manage {
 			cmd += "--encoding UTF-8 ";
 			cmd += "--enable-local-file-access ";
 			cmd += "--enable-javascript ";
-			cmd += "--load-error-handling ignore ";
+			cmd += "--load-error-handling ignore "; // default
 			cmd += "--print-media-type ";
+
+			// For debugging
+			/*
+			cmd += "--debug-javascript ";
+			cmd += "--no-stop-slow-scripts ";
+			cmd += "--javascript-delay 1000  ";
+			*/
+
 			cmd += `${opts.html} ${opts.output} `;
 			await Misc.exec(cmd);
 		}

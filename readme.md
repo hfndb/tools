@@ -12,11 +12,15 @@ In this repo some notes and tools that I use in a Linux environment, [Kubuntu](h
 * Node scripts:
   - clean-bash-history.mjs: Clean ~/.bash_history and append configured items.
   - html-to-pdf.mjs: Watch a .html file for changes and use the [puppeteer](https://www.npmjs.com/package/puppeteer) package to generate a PDF file. Or don't watch but generate a PDF file.
+    + Uses node-scripts/settings.json
   - manage-git-remote.mjs: Manage remote repositories. Configure, create, install, list, auto-pack remotes, auto-pull remotes. Menu driven.
   - srt.mjs: Transform .srt files for subtitles of films to readable .txt without time codes. And convert what's in a .txt file to .html (br tags added). Menu driven.
   - md-to-html/convert.mjs: Transform .md file to templated .html file
   - md-to-html/wrapper.sh: Transform .md file to .pdf file, in background using .html file output by convert.mjs
-  - md-to-html/batch.mjs: Use a settings.json file for a batch to transform from .md files to .pdf files. All .md files in settings.json (entry fileIn) are relative to the directory where the settings.json file is put.
+  - md-to-html/batch.mjs: Use a settings.json file for a batch to transform from .md files to .pdf files. About settings.json:
+    + Engines that can be used: Puppeteer (using Chrome) or wkhtmltopdf
+    + All .md files (fileIn) are relative to the directory where the settings.json file is put
+    + All generated .pdf files are relative to dirPdf
 
 * Programs:
 	- [Email](./programs/email/readme.md) Tiny system to write and spell check email. Scripts in node-scripts/md-to-html are based on .css in this tiny project.
@@ -45,6 +49,9 @@ $ sudo apt-get install -y nodejs # Including npm
 $ sudo npm install -g ascii-table3 zx
 
 ```
+
+For PDF file creation, if you prefer to use wkhtmltopdf, then download and install [wkhtmltopdf](http://wkhtmltopdf.org/downloads.html).
+Note: Do not use the version delivered by your package manager, since it has less functionality.
 
 
 ## Installation
